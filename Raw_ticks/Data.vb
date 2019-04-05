@@ -6,7 +6,7 @@ Public Class Data
     'Dim wrapper_imp As EWrapperImpl = New EWrapperImpl
     Dim cls_Data_Requests_Handlers_write_to_file As Data_Requests_Handlers_write_to_file = New Data_Requests_Handlers_write_to_file
     Dim cls_Data_Requests_Handlers_ma_5_10 As Data_Requests_Handlers_ma_5_10 = New Data_Requests_Handlers_ma_5_10
-    'Dim cls_Data_Requests_Handlers_Bollinger_Bands As Data_Requests_Handlers_Bollinger_Bands = New Data_Requests_Handlers_Bollinger_Bands
+    Dim cls_Data_Requests_Handlers_Bollinger_Bands As Bollinger_Bands_Data_Requests_Handlers = New Bollinger_Bands_Data_Requests_Handlers
     'Dim i_form1 As Form1 = New Form1
     'Public socket_client As EClientSocket = wrapper_imp.socketClient
     'Dim create_new_fldr_for_cntrt As Create_new_folder_for_cntrt = New Create_new_folder_for_cntrt
