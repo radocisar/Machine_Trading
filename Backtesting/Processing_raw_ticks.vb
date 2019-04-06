@@ -2,7 +2,7 @@
 
 Public Class Processing_raw_ticks
 
-    Public file_path As String = "C:\Raw_Data\Raw_Tickstream\"
+    Public file_path As String = "E:\Test_FX_Ticks_Download\"
     Public file_txt As String = "Raw_ticks_1.txt"
 
     Public last As Double?

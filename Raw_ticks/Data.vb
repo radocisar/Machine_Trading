@@ -12,7 +12,7 @@ Public Class Data
     'Dim create_new_fldr_for_cntrt As Create_new_folder_for_cntrt = New Create_new_folder_for_cntrt
 
     Private WithEvents Wrapper_events As New EWrapperImpl
-    Public file_path As String = "C:\Raw_Data\Raw_Tickstream\" & Functions.cntrt.Symbol
+    Public file_path As String = "E:\Test_FX_Ticks_Download\" & Functions.cntrt.Symbol
 
 #Region "Data Requests Raisers"
 

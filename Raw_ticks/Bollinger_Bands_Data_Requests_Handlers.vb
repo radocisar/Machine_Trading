@@ -7,6 +7,7 @@ Public Class Bollinger_Bands_Data_Requests_Handlers
     Private ASK_price As Double
     Private candle_arr() As Double
     Private Current_time As DateTime
+    Dim mls_200 As TimeSpan
 
     Sub mm_price_return_handler(tickerId As Integer, field As Integer, price As Double, canAutoExecute As Integer)
 
@@ -17,6 +18,7 @@ Public Class Bollinger_Bands_Data_Requests_Handlers
         Dim high_price As Double
         Dim low_price As Double
         Dim last_price As Double
+        Dim current_price As Double
 
         ReDim Preserve candle_arr(10)
 
@@ -35,21 +37,28 @@ Public Class Bollinger_Bands_Data_Requests_Handlers
                 Exit Sub
             Case 4
                 'tick_type = "LAST"
+                current_price = price
                 Exit Sub
         End Select
 
-
+        ' Enruse candles begin being filled from the top of the minute
 
         Current_time = DateTime.Now
 
         If Current_time.Second <> 0 Then
-
-
-
+            last_price = current_price
+            If current_price > high_price Then
+                high_price = current_price
+            End If
+            If current_price < low_price Then
+                low_price = current_price
+            End If
         ElseIf Current_time.Second = 0 And last_price <> "" Then
-
             'assign candle into the array
-
+            open_price = current_price
+            high_price = current_price
+            low_price = current_price
+            last_price = current_price
         End If
 
         mls_200 = New TimeSpan(0, 0, 0, 0, 200)
