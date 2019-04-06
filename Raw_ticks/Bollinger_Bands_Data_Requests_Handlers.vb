@@ -19,6 +19,12 @@ Public Class Bollinger_Bands_Data_Requests_Handlers
         Dim low_price As Double
         Dim last_price As Double
         Dim current_price As Double
+        Dim first_top_of_minute_passed As Boolean
+        Dim not_first_tick_of_minute As Boolean
+        Dim prev_tick_second As Integer
+        Dim minute_candle_non_zero_sec_ticking_in_progress As Boolean
+        Dim candle_start_time As DateTime
+        Dim candle_end_time As DateTime
 
         ReDim Preserve candle_arr(10)
 
@@ -41,24 +47,48 @@ Public Class Bollinger_Bands_Data_Requests_Handlers
                 Exit Sub
         End Select
 
-        ' Enruse candles begin being filled from the top of the minute
-
         Current_time = DateTime.Now
 
-        If Current_time.Second <> 0 Then
-            last_price = current_price
-            If current_price > high_price Then
+        ' Before first candle starts to be filled
+        If first_top_of_minute_passed = False Then
+            candle_start_time = Current_time
+            candle_end_time = Current_time + TimeSpan(0, 0, 59)
+            'If Current_time.Second = 0 Then
+            '    first_top_of_minute_passed = True
+            'Else
+            '    Exit Sub
+            'End If
+        End If
+
+
+        If Current_time.Second <> 0 And not_first_tick_of_minute = True Then
+            minute_candle_non_zero_sec_ticking_in_progress = True
+        End If
+
+        If Current_time.Second = 0 And minute_candle_non_zero_sec_ticking_in_progress = True Then
+            not_first_tick_of_minute = False
+        End If
+
+        ' After first candle starts to be filled
+        If Current_time.Second <> 0 Or (Current_time.Second = 0 And not_first_tick_of_minute = True) Then
+
+                ' Assign last price
+                last_price = current_price
+                ' Assign high price
+                If current_price > high_price Then
+                    high_price = current_price
+                End If
+                ' Assign low price
+                If current_price < low_price Then
+                    low_price = current_price
+                End If
+            ElseIf Current_time.Second = 0 And not_first_tick_of_minute = False And last_price <> "" Then
+                'assign candle into the array
+                open_price = current_price
                 high_price = current_price
-            End If
-            If current_price < low_price Then
                 low_price = current_price
-            End If
-        ElseIf Current_time.Second = 0 And last_price <> "" Then
-            'assign candle into the array
-            open_price = current_price
-            high_price = current_price
-            low_price = current_price
-            last_price = current_price
+                last_price = current_price
+                not_first_tick_of_minute = True
         End If
 
         mls_200 = New TimeSpan(0, 0, 0, 0, 200)
