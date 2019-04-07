@@ -43,6 +43,11 @@ Partial Class Form1
         Me.lbl_requesting_open_orders = New System.Windows.Forms.Label()
         Me.lbl_downloading_tick_data = New System.Windows.Forms.Label()
         Me.lbl_auto_trading = New System.Windows.Forms.Label()
+        Me.lbl_candle_resolution = New System.Windows.Forms.Label()
+        Me.tbx_candle_resolution = New System.Windows.Forms.TextBox()
+        Me.lbl_for_bollinger_bands = New System.Windows.Forms.Label()
+        Me.tbx_std_dev = New System.Windows.Forms.TextBox()
+        Me.lbl_std_dev = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'btn_cnct
@@ -233,11 +238,57 @@ Partial Class Form1
         Me.lbl_auto_trading.TabIndex = 20
         Me.lbl_auto_trading.Text = "Auto Trading"
         '
+        'lbl_candle_resolution
+        '
+        Me.lbl_candle_resolution.AutoSize = True
+        Me.lbl_candle_resolution.Location = New System.Drawing.Point(99, 254)
+        Me.lbl_candle_resolution.Name = "lbl_candle_resolution"
+        Me.lbl_candle_resolution.Size = New System.Drawing.Size(93, 13)
+        Me.lbl_candle_resolution.TabIndex = 21
+        Me.lbl_candle_resolution.Text = "Candle Resolution"
+        '
+        'tbx_candle_resolution
+        '
+        Me.tbx_candle_resolution.Location = New System.Drawing.Point(126, 282)
+        Me.tbx_candle_resolution.Name = "tbx_candle_resolution"
+        Me.tbx_candle_resolution.Size = New System.Drawing.Size(31, 20)
+        Me.tbx_candle_resolution.TabIndex = 22
+        '
+        'lbl_for_bollinger_bands
+        '
+        Me.lbl_for_bollinger_bands.AutoSize = True
+        Me.lbl_for_bollinger_bands.Location = New System.Drawing.Point(245, 218)
+        Me.lbl_for_bollinger_bands.Name = "lbl_for_bollinger_bands"
+        Me.lbl_for_bollinger_bands.Size = New System.Drawing.Size(98, 13)
+        Me.lbl_for_bollinger_bands.TabIndex = 23
+        Me.lbl_for_bollinger_bands.Text = "For Bollinger Bands"
+        '
+        'tbx_std_dev
+        '
+        Me.tbx_std_dev.Location = New System.Drawing.Point(248, 282)
+        Me.tbx_std_dev.Name = "tbx_std_dev"
+        Me.tbx_std_dev.Size = New System.Drawing.Size(22, 20)
+        Me.tbx_std_dev.TabIndex = 24
+        '
+        'lbl_std_dev
+        '
+        Me.lbl_std_dev.AutoSize = True
+        Me.lbl_std_dev.Location = New System.Drawing.Point(234, 253)
+        Me.lbl_std_dev.Name = "lbl_std_dev"
+        Me.lbl_std_dev.Size = New System.Drawing.Size(46, 13)
+        Me.lbl_std_dev.TabIndex = 25
+        Me.lbl_std_dev.Text = "Std Dev"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(384, 345)
+        Me.Controls.Add(Me.lbl_std_dev)
+        Me.Controls.Add(Me.tbx_std_dev)
+        Me.Controls.Add(Me.lbl_for_bollinger_bands)
+        Me.Controls.Add(Me.tbx_candle_resolution)
+        Me.Controls.Add(Me.lbl_candle_resolution)
         Me.Controls.Add(Me.lbl_auto_trading)
         Me.Controls.Add(Me.lbl_downloading_tick_data)
         Me.Controls.Add(Me.lbl_requesting_open_orders)
@@ -288,4 +339,9 @@ Partial Class Form1
     Friend WithEvents lbl_requesting_open_orders As Label
     Friend WithEvents lbl_downloading_tick_data As Label
     Friend WithEvents lbl_auto_trading As Label
+    Friend WithEvents lbl_candle_resolution As Label
+    Friend WithEvents tbx_candle_resolution As TextBox
+    Friend WithEvents lbl_for_bollinger_bands As Label
+    Friend WithEvents tbx_std_dev As TextBox
+    Friend WithEvents lbl_std_dev As Label
 End Class

@@ -9,6 +9,7 @@ Public Class Bollinger_Bands_Data_Requests_Handlers
     Dim mls_200 As TimeSpan
     Dim i_candle As Candle = New Candle
     Private candle_arr() As Candle
+    Public candle_resolution As Integer
 
     Sub mm_price_return_handler(tickerId As Integer, field As Integer, price As Double, canAutoExecute As Integer)
 
@@ -133,19 +134,20 @@ Public Class Bollinger_Bands_Data_Requests_Handlers
 
     Sub candle_array(open_price As Double, high_price As Double, low_price As Double, last_price As Double)
 
-        ReDim Preserve candle_arr(29)
+        candle_resolution = CInt(Form1.lbl_candle_resolution.Text)
+        ReDim Preserve candle_arr(candle_resolution - 1)
 
-        For n = 0 To 28
+        For n = 0 To candle_resolution - 2
             candle_arr(n).open = candle_arr(n + 1).open
             candle_arr(n).high = candle_arr(n + 1).high
             candle_arr(n).low = candle_arr(n + 1).low
             candle_arr(n).close = candle_arr(n + 1).close
         Next
 
-        candle_arr(29).open = open_price
-        candle_arr(29).high = high_price
-        candle_arr(29).low = low_price
-        candle_arr(29).close = last_price
+        candle_arr(candle_resolution - 1).open = open_price
+        candle_arr(candle_resolution - 1).high = high_price
+        candle_arr(candle_resolution - 1).low = low_price
+        candle_arr(candle_resolution - 1).close = last_price
 
     End Sub
 End Class
