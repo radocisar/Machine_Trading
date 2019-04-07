@@ -94,6 +94,7 @@
   <ItemGroup>
     <Compile Include="Auto_close_trade_parameters.vb" />
     <Compile Include="Auto_open_trade_parameters.vb" />
+    <Compile Include="Candle.vb" />
     <Compile Include="Conditions_analysis_ma_5_10.vb" />
     <Compile Include="Create_new_folder_for_cntrt.vb" />
     <Compile Include="Current_time.vb" />

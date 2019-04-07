@@ -5,9 +5,10 @@ Public Class Bollinger_Bands_Data_Requests_Handlers
 
     Private BID_price As Double
     Private ASK_price As Double
-    Private candle_arr() As Double
     Private Current_time As DateTime
     Dim mls_200 As TimeSpan
+    Dim i_candle As Candle = New Candle
+    Private candle_arr() As Candle
 
     Sub mm_price_return_handler(tickerId As Integer, field As Integer, price As Double, canAutoExecute As Integer)
 
@@ -30,8 +31,6 @@ Public Class Bollinger_Bands_Data_Requests_Handlers
         Dim candle_end_time As DateTime
         Dim first_tick_of_first_candle As Boolean
 
-        ReDim Preserve candle_arr(10)
-
         Select Case field
             Case 1
                 'tick_type = "BID"
@@ -50,6 +49,8 @@ Public Class Bollinger_Bands_Data_Requests_Handlers
                 current_price = price
                 Exit Sub
         End Select
+
+#Region "Filling in minutely candles"
 
         Current_time = DateTime.Now
 
@@ -89,7 +90,8 @@ Public Class Bollinger_Bands_Data_Requests_Handlers
             ' Assign volume
 
         Else ' next candle
-            ' TODO assign candle into the array
+            ' assigning candle
+            Call candle_array(open_price, high_price, low_price, last_price)
             candle_start_time = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, Current_time.Hour, Current_time.Minute, 0)
             candle_end_time = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, Current_time.Hour, Current_time.Minute, 59)
             open_price = current_price
@@ -110,34 +112,40 @@ Public Class Bollinger_Bands_Data_Requests_Handlers
         'End If
 
         ' After first candle starts to be filled
-        If Current_time.Second <> 0 Or (Current_time.Second = 0 And not_first_tick_of_minute = True) Then
+        'If Current_time.Second <> 0 Or (Current_time.Second = 0 And not_first_tick_of_minute = True) Then
 
 
-        ElseIf Current_time.Second = 0 And not_first_tick_of_minute = False And last_price <> "" Then
-                'assign candle into the array
-                open_price = current_price
-                high_price = current_price
-                low_price = current_price
-                last_price = current_price
-                not_first_tick_of_minute = True
-        End If
+        'ElseIf Current_time.Second = 0 And not_first_tick_of_minute = False And last_price <> "" Then
+        '    assign candle into the array
+        '        open_price = current_price
+        '    high_price = current_price
+        '    low_price = current_price
+        '    last_price = current_price
+        '    not_first_tick_of_minute = True
+        'End If
 
-        mls_200 = New TimeSpan(0, 0, 0, 0, 200)
+        'mls_200 = New TimeSpan(0, 0, 0, 0, 200)
+#End Region
 
 
-
-        candle_arr(0) = candle_arr(1)
-        candle_arr(1) = candle_arr(2)
-        candle_arr(2) = candle_arr(3)
-        candle_arr(3) = candle_arr(4)
-        candle_arr(4) = candle_arr(5)
-        candle_arr(5) = candle_arr(6)
-        candle_arr(6) = candle_arr(7)
-        candle_arr(7) = candle_arr(8)
-        candle_arr(8) = candle_arr(9)
-        candle_arr(9) = candle_arr(10)
-        candle_arr(10) = last_price
 
     End Sub
 
+    Sub candle_array(open_price As Double, high_price As Double, low_price As Double, last_price As Double)
+
+        ReDim Preserve candle_arr(29)
+
+        For n = 0 To 28
+            candle_arr(n).open = candle_arr(n + 1).open
+            candle_arr(n).high = candle_arr(n + 1).high
+            candle_arr(n).low = candle_arr(n + 1).low
+            candle_arr(n).close = candle_arr(n + 1).close
+        Next
+
+        candle_arr(29).open = open_price
+        candle_arr(29).high = high_price
+        candle_arr(29).low = low_price
+        candle_arr(29).close = last_price
+
+    End Sub
 End Class
