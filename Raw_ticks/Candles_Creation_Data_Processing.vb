@@ -56,17 +56,25 @@ Public Class Candles_Creation_Data_Processing
 
         Current_time = DateTime.Now
 
+        For n = 0 To ((1440 / candle_resolution) - 1)
+            If (New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0).AddMinutes(n * candle_resolution) < Current_time) And (Current_time < New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0).AddMinutes((n + 1) * candle_resolution)) Then
+                MsgBox(New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0).AddMinutes(n * candle_resolution))
+
+            End If
+        Next
+
         ' Before first candle starts to be filled
         If first_top_of_minute_passed = False Then
             If not_first_tick = False Then
-                first_candle_start_time = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, Current_time.Hour, Current_time.Minute, 0)
-                first_candle_end_time = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, Current_time.Hour, Current_time.Minute, 59)
+
+                first_candle_start_time = Calculate_start_time_of_candle(Current_time)
+                first_candle_end_time = Calculate_end_time_of_candle(Current_time)
                 not_first_tick = True
             End If
             If Current_time >= first_candle_start_time + New TimeSpan(0, 0, 60) Then
                 first_top_of_minute_passed = True
-                candle_start_time = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, Current_time.Hour, Current_time.Minute, 0)
-                candle_end_time = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, Current_time.Hour, Current_time.Minute, 59)
+                candle_start_time = Calculate_start_time_of_candle(Current_time)
+                candle_end_time = Calculate_end_time_of_candle(Current_time)
                 'first_tick_of_first_candle = True
                 open_price = current_price
                 high_price = current_price
@@ -98,8 +106,8 @@ Public Class Candles_Creation_Data_Processing
         Else ' next candle
             ' assigning candle
             Call candle_array(open_price, high_price, low_price, last_price, "new-candle")
-            candle_start_time = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, Current_time.Hour, Current_time.Minute, 0)
-            candle_end_time = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, Current_time.Hour, Current_time.Minute, 59)
+            candle_start_time = Calculate_start_time_of_candle(Current_time)
+            candle_end_time = Calculate_end_time_of_candle(Current_time)
             open_price = current_price
             high_price = current_price
             low_price = current_price
@@ -133,11 +141,9 @@ Public Class Candles_Creation_Data_Processing
         'End If
 
         'mls_200 = New TimeSpan(0, 0, 0, 0, 200)
-#End Region
-
-
 
     End Sub
+#End Region
 
 #Region "Creating candles array"
     Sub candle_array(open_price As Double, high_price As Double, low_price As Double, last_price As Double, origin As String)
@@ -171,4 +177,33 @@ Public Class Candles_Creation_Data_Processing
     End Sub
 #End Region
 
+#Region "Functions"
+    Function Calculate_start_time_of_candle(Current_time As DateTime)
+
+        Dim current_midnight As DateTime
+
+        current_midnight = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0)
+
+        For n = 0 To ((1440 / candle_resolution) - 1)
+            If (current_midnight.AddMinutes(n * candle_resolution) < Current_time) And (Current_time < current_midnight.AddMinutes((n + 1) * candle_resolution)) Then
+                Return current_midnight.AddMinutes(n * candle_resolution)
+            End If
+        Next
+
+    End Function
+
+    Function Calculate_end_time_of_candle(Current_time As DateTime)
+
+        Dim current_midnight As DateTime
+
+        current_midnight = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0)
+
+        For n = 0 To ((1440 / candle_resolution) - 1)
+            If (current_midnight.AddMinutes(n * candle_resolution) < Current_time) And (Current_time < current_midnight.AddMinutes((n + 1) * candle_resolution)) Then
+                Return current_midnight.AddMinutes((n + 1) * candle_resolution)
+            End If
+        Next
+
+    End Function
+#End Region
 End Class
