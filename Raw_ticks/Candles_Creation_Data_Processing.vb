@@ -16,9 +16,6 @@ Public Class Candles_Creation_Data_Processing
 
     Sub mm_price_return_handler(tickerId As Integer, field As Integer, price As Double, canAutoExecute As Integer)
 
-        Dim upper_band As Double
-        Dim lower_band As Double
-        Dim middle_band As Double
         Dim open_price As Double
         Dim high_price As Double
         Dim low_price As Double
