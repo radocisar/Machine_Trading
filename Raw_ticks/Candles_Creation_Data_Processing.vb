@@ -195,12 +195,15 @@ Public Class Candles_Creation_Data_Processing
     Function Calculate_end_time_of_candle(Current_time As DateTime)
 
         Dim current_midnight As DateTime
+        Dim intermediate_end_time As DateTime
+
 
         current_midnight = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0)
 
         For n = 0 To ((1440 / candle_resolution) - 1)
-            If (current_midnight.AddMinutes(n * candle_resolution) < Current_time) And (Current_time < current_midnight.AddMinutes((n + 1) * candle_resolution)) Then
-                Return current_midnight.AddMinutes((n + 1) * candle_resolution)
+            intermediate_end_time = current_midnight.AddMinutes((n + 1) * candle_resolution - 1)
+            If (current_midnight.AddMinutes(n * candle_resolution) < Current_time) And (Current_time < intermediate_end_time.AddSeconds(59)) Then
+                Return intermediate_end_time.AddSeconds(59)
             End If
         Next
 
