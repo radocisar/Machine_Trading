@@ -48,6 +48,8 @@ Partial Class Form1
         Me.lbl_for_bollinger_bands = New System.Windows.Forms.Label()
         Me.tbx_std_dev = New System.Windows.Forms.TextBox()
         Me.lbl_std_dev = New System.Windows.Forms.Label()
+        Me.lbl_min_num_of_candles = New System.Windows.Forms.Label()
+        Me.tbx_min_num_of_candles = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'btn_cnct
@@ -249,7 +251,7 @@ Partial Class Form1
         '
         'tbx_candle_resolution
         '
-        Me.tbx_candle_resolution.Location = New System.Drawing.Point(126, 282)
+        Me.tbx_candle_resolution.Location = New System.Drawing.Point(123, 270)
         Me.tbx_candle_resolution.Name = "tbx_candle_resolution"
         Me.tbx_candle_resolution.Size = New System.Drawing.Size(31, 20)
         Me.tbx_candle_resolution.TabIndex = 22
@@ -279,11 +281,29 @@ Partial Class Form1
         Me.lbl_std_dev.TabIndex = 25
         Me.lbl_std_dev.Text = "Std Dev"
         '
+        'lbl_min_num_of_candles
+        '
+        Me.lbl_min_num_of_candles.AutoSize = True
+        Me.lbl_min_num_of_candles.Location = New System.Drawing.Point(99, 293)
+        Me.lbl_min_num_of_candles.Name = "lbl_min_num_of_candles"
+        Me.lbl_min_num_of_candles.Size = New System.Drawing.Size(86, 13)
+        Me.lbl_min_num_of_candles.TabIndex = 26
+        Me.lbl_min_num_of_candles.Text = "Min # of candles"
+        '
+        'tbx_min_num_of_candles
+        '
+        Me.tbx_min_num_of_candles.Location = New System.Drawing.Point(123, 309)
+        Me.tbx_min_num_of_candles.Name = "tbx_min_num_of_candles"
+        Me.tbx_min_num_of_candles.Size = New System.Drawing.Size(16, 20)
+        Me.tbx_min_num_of_candles.TabIndex = 27
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(384, 345)
+        Me.Controls.Add(Me.tbx_min_num_of_candles)
+        Me.Controls.Add(Me.lbl_min_num_of_candles)
         Me.Controls.Add(Me.lbl_std_dev)
         Me.Controls.Add(Me.tbx_std_dev)
         Me.Controls.Add(Me.lbl_for_bollinger_bands)
@@ -344,4 +364,6 @@ Partial Class Form1
     Friend WithEvents lbl_for_bollinger_bands As Label
     Friend WithEvents tbx_std_dev As TextBox
     Friend WithEvents lbl_std_dev As Label
+    Friend WithEvents lbl_min_num_of_candles As Label
+    Friend WithEvents tbx_min_num_of_candles As TextBox
 End Class
