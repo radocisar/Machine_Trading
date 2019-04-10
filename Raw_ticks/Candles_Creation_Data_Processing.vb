@@ -9,8 +9,8 @@ Public Class Candles_Creation_Data_Processing
     Dim mls_200 As TimeSpan
     Dim i_candle As Candle = New Candle
     Private candle_arr() As Candle
-    Public candle_resolution As Integer = CInt(Form1.lbl_candle_resolution.Text)
-    Public candle_init_count As Integer = CInt(Form1.lbl_min_num_of_candles.Text)
+    'Public candle_resolution As Integer = CInt(Form1.lbl_candle_resolution.Text)
+    'Public candle_init_count As Integer = CInt(Form1.lbl_min_num_of_candles.Text)
     Public Shared Event start_trading_strategy(ByVal candle_arr() As Candle, ByVal open_price As Double, ByVal high_price As Double, ByVal low_price As Double, ByVal last_price As Double)
     Public live_updates_started As Boolean
 
@@ -56,9 +56,9 @@ Public Class Candles_Creation_Data_Processing
 
         Current_time = DateTime.Now
 
-        For n = 0 To ((1440 / candle_resolution) - 1)
-            If (New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0).AddMinutes(n * candle_resolution) < Current_time) And (Current_time < New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0).AddMinutes((n + 1) * candle_resolution)) Then
-                MsgBox(New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0).AddMinutes(n * candle_resolution))
+        For n = 0 To ((1440 / Form1.candle_resolution) - 1)
+            If (New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0).AddMinutes(n * Form1.candle_resolution) < Current_time) And (Current_time < New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0).AddMinutes((n + 1) * Form1.candle_resolution)) Then
+                MsgBox(New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0).AddMinutes(n * Form1.candle_resolution))
 
             End If
         Next
@@ -153,19 +153,19 @@ Public Class Candles_Creation_Data_Processing
 
         Select Case origin
             Case "new-candle"
-                ReDim Preserve candle_arr(candle_init_count - 1)
+                ReDim Preserve candle_arr(Form1.candle_init_count - 1)
 
-                For n = 0 To candle_init_count - 2
+                For n = 0 To Form1.candle_init_count - 2
                     candle_arr(n).open = candle_arr(n + 1).open
                     candle_arr(n).high = candle_arr(n + 1).high
                     candle_arr(n).low = candle_arr(n + 1).low
                     candle_arr(n).close = candle_arr(n + 1).close
                 Next
 
-                candle_arr(candle_init_count - 1).open = open_price
-                candle_arr(candle_init_count - 1).high = high_price
-                candle_arr(candle_init_count - 1).low = low_price
-                candle_arr(candle_init_count - 1).close = last_price
+                candle_arr(Form1.candle_init_count - 1).open = open_price
+                candle_arr(Form1.candle_init_count - 1).high = high_price
+                candle_arr(Form1.candle_init_count - 1).low = low_price
+                candle_arr(Form1.candle_init_count - 1).close = last_price
 
                 If candle_arr(0).close <> "" Then
                     ' start trading the strategy
@@ -197,9 +197,9 @@ Public Class Candles_Creation_Data_Processing
 
         current_midnight = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0)
 
-        For n = 0 To ((1440 / candle_resolution) - 1)
-            If (current_midnight.AddMinutes(n * candle_resolution) < Current_time) And (Current_time < current_midnight.AddMinutes((n + 1) * candle_resolution)) Then
-                Return current_midnight.AddMinutes(n * candle_resolution)
+        For n = 0 To ((1440 / Form1.candle_resolution) - 1)
+            If (current_midnight.AddMinutes(n * Form1.candle_resolution) < Current_time) And (Current_time < current_midnight.AddMinutes((n + 1) * Form1.candle_resolution)) Then
+                Return current_midnight.AddMinutes(n * Form1.candle_resolution)
             End If
         Next
 
@@ -213,9 +213,9 @@ Public Class Candles_Creation_Data_Processing
 
         current_midnight = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0)
 
-        For n = 0 To ((1440 / candle_resolution) - 1)
-            intermediate_end_time = current_midnight.AddMinutes((n + 1) * candle_resolution - 1)
-            If (current_midnight.AddMinutes(n * candle_resolution) < Current_time) And (Current_time < intermediate_end_time.AddSeconds(59)) Then
+        For n = 0 To ((1440 / Form1.candle_resolution) - 1)
+            intermediate_end_time = current_midnight.AddMinutes((n + 1) * Form1.candle_resolution - 1)
+            If (current_midnight.AddMinutes(n * Form1.candle_resolution) < Current_time) And (Current_time < intermediate_end_time.AddSeconds(59)) Then
                 Return intermediate_end_time.AddSeconds(59)
             End If
         Next

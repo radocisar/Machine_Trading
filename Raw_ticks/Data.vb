@@ -51,8 +51,8 @@ Public Class Data
         If Form1.auto_trading = True Then
 
             '----- For FX data handling for trading
-            Call cls_Data_Requests_Handlers_ma_5_10.mm_price_return_handler(tickerId, field, price, canAutoExecute)
-            'Call cls_Candles_Creation_Data_Processing.mm_price_return_handler(tickerId, field, price, canAutoExecute)
+            'Call cls_Data_Requests_Handlers_ma_5_10.mm_price_return_handler(tickerId, field, price, canAutoExecute)
+            Call cls_Candles_Creation_Data_Processing.mm_price_return_handler(tickerId, field, price, canAutoExecute)
         Else
 
             '----- For all instruments' data handling for raw ticks download

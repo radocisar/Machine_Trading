@@ -12,6 +12,8 @@ Public Class Form1
     'Public WithEvents Wrapper_events As New EWrapperImpl
     Public Shared auto_trading As Boolean
     Public Shared str_wrt_opened As Boolean
+    Public Shared candle_resolution As Integer
+    Public Shared candle_init_count As Integer
 
     Private Sub btn_cnct_Click(sender As Object, e As EventArgs) Handles btn_cnct.Click
 
@@ -98,6 +100,9 @@ Public Class Form1
             Call i_Open_str_wrt.Open_str_wrt_method()
             Form1.str_wrt_opened = True
         End If
+
+        candle_resolution = CInt(tbx_candle_resolution.Text)
+        candle_init_count = CInt(tbx_min_num_of_candles.Text)
 
         Call data_cls.req_data()
 
