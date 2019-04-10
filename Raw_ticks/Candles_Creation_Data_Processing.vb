@@ -148,6 +148,9 @@ Public Class Candles_Creation_Data_Processing
 #Region "Creating candles array"
     Sub candle_array(open_price As Double, high_price As Double, low_price As Double, last_price As Double, origin As String)
 
+        Dim sw As StreamWriter
+        sw = New StreamWriter("E:\Test_FX_Ticks_Download\log.txt", True)
+
         Select Case origin
             Case "new-candle"
                 ReDim Preserve candle_arr(candle_init_count - 1)
@@ -168,9 +171,19 @@ Public Class Candles_Creation_Data_Processing
                     ' start trading the strategy
                     live_updates_started = True
                     'RaiseEvent start_trading_strategy(candle_arr)
+                    sw.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.ffff"))
+                    sw.WriteLine(candle_arr(0))
+                    sw.WriteLine(candle_arr(1))
+                    sw.WriteLine(candle_arr(2))
+                    sw.WriteLine(candle_arr(3))
+                    sw.WriteLine(candle_arr(4))
                 End If
             Case "intra-candle"
-                RaiseEvent start_trading_strategy(candle_arr, open_price, high_price, low_price, last_price)
+                'RaiseEvent start_trading_strategy(candle_arr, open_price, high_price, low_price, last_price)
+                sw.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.ffff"))
+                sw.WriteLine(open_price, high_price, low_price, last_price)
+                sw.WriteLine("     ")
+                sw.Close()
         End Select
 
 

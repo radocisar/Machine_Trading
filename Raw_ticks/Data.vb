@@ -6,7 +6,7 @@ Public Class Data
     'Dim wrapper_imp As EWrapperImpl = New EWrapperImpl
     Dim cls_Data_Requests_Handlers_write_to_file As Data_Requests_Handlers_write_to_file = New Data_Requests_Handlers_write_to_file
     Dim cls_Data_Requests_Handlers_ma_5_10 As Data_Requests_Handlers_ma_5_10 = New Data_Requests_Handlers_ma_5_10
-    Dim cls_Data_Requests_Handlers_Bollinger_Bands As Candles_Creation_Data_Processing = New Candles_Creation_Data_Processing
+    Dim cls_Candles_Creation_Data_Processing As Candles_Creation_Data_Processing = New Candles_Creation_Data_Processing
     'Dim i_form1 As Form1 = New Form1
     'Public socket_client As EClientSocket = wrapper_imp.socketClient
     'Dim create_new_fldr_for_cntrt As Create_new_folder_for_cntrt = New Create_new_folder_for_cntrt
@@ -52,7 +52,7 @@ Public Class Data
 
             '----- For FX data handling for trading
             Call cls_Data_Requests_Handlers_ma_5_10.mm_price_return_handler(tickerId, field, price, canAutoExecute)
-            'Call cls_Data_Requests_Handlers_Bollinger_Bands.mm_price_return_handler(tickerId, field, price, canAutoExecute)
+            'Call cls_Candles_Creation_Data_Processing.mm_price_return_handler(tickerId, field, price, canAutoExecute)
         Else
 
             '----- For all instruments' data handling for raw ticks download
