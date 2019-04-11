@@ -8,30 +8,32 @@ Public Class Candles_Creation_Data_Processing
     Private Current_time As DateTime
     Dim mls_200 As TimeSpan
     Dim i_candle As Candle = New Candle
-    Private candle_arr() As Candle
+    Private candle_arr(4, 3) As Double
     'Public candle_resolution As Integer = CInt(Form1.lbl_candle_resolution.Text)
     'Public candle_init_count As Integer = CInt(Form1.lbl_min_num_of_candles.Text)
     Public Shared Event start_trading_strategy(ByVal candle_arr() As Candle, ByVal open_price As Double, ByVal high_price As Double, ByVal low_price As Double, ByVal last_price As Double)
     Public live_updates_started As Boolean
+    Public not_first_tick As Boolean
+    Public first_top_of_minute_passed As Boolean
+    Public first_candle_start_time As DateTime
+    Public first_candle_end_time As DateTime
+    Public candle_start_time As DateTime
+    Public candle_end_time As DateTime
+    Public open_price As Double
+    Public high_price As Double
+    Public low_price As Double
+    Public last_price As Double
+    Public current_price As Double
+
+    'Dim sw As StreamWriter
 
     Sub mm_price_return_handler(tickerId As Integer, field As Integer, price As Double, canAutoExecute As Integer)
 
-        Dim open_price As Double
-        Dim high_price As Double
-        Dim low_price As Double
-        Dim last_price As Double
-        Dim current_price As Double
-        Dim first_top_of_minute_passed As Boolean
-        Dim not_first_tick_of_minute As Boolean
-        Dim prev_tick_second As Integer
-        Dim minute_candle_non_zero_sec_ticking_in_progress As Boolean
-        Dim first_candle_start_time As DateTime
-        Dim first_candle_end_time As DateTime
-        Dim not_first_tick As Boolean
-        Dim candle_start_time As DateTime
-        Dim candle_end_time As DateTime
-        Dim first_tick_of_first_candle As Boolean
-        Dim live_updates_started As Boolean
+
+        'Dim not_first_tick_of_minute As Boolean
+        'Dim prev_tick_second As Integer
+        'Dim minute_candle_non_zero_sec_ticking_in_progress As Boolean
+        'Dim first_tick_of_first_candle As Boolean
 
         Select Case field
             Case 1
@@ -48,20 +50,19 @@ Public Class Candles_Creation_Data_Processing
                 Exit Sub
             Case 4
                 'tick_type = "LAST"
-                current_price = price
+                'current_price = price
                 Exit Sub
         End Select
+
+        If BID_price <> 0 And ASK_price <> 0 Then
+            current_price = (BID_price + ASK_price) / 2
+        Else
+            Exit Sub
+        End If
 
 #Region "Filling in minutely candles"
 
         Current_time = DateTime.Now
-
-        For n = 0 To ((1440 / Form1.candle_resolution) - 1)
-            If (New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0).AddMinutes(n * Form1.candle_resolution) < Current_time) And (Current_time < New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0).AddMinutes((n + 1) * Form1.candle_resolution)) Then
-                MsgBox(New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0).AddMinutes(n * Form1.candle_resolution))
-
-            End If
-        Next
 
         ' Before first candle starts to be filled
         If first_top_of_minute_passed = False Then
@@ -148,42 +149,56 @@ Public Class Candles_Creation_Data_Processing
 #Region "Creating candles array"
     Sub candle_array(open_price As Double, high_price As Double, low_price As Double, last_price As Double, origin As String)
 
-        Dim sw As StreamWriter
-        sw = New StreamWriter("E:\Test_FX_Ticks_Download\log.txt", True)
-
         Select Case origin
             Case "new-candle"
-                ReDim Preserve candle_arr(Form1.candle_init_count - 1)
+                ReDim Preserve candle_arr(Form1.candle_init_count - 1, 3)
 
                 For n = 0 To Form1.candle_init_count - 2
-                    candle_arr(n).open = candle_arr(n + 1).open
-                    candle_arr(n).high = candle_arr(n + 1).high
-                    candle_arr(n).low = candle_arr(n + 1).low
-                    candle_arr(n).close = candle_arr(n + 1).close
+                    ' First shift (when only last slot of the array is populated) and ensures that "open", "high", "low" and "close" are created for candle_arr()
+                    If candle_arr(Form1.candle_init_count - 1, 0) <> Nothing Then
+                        candle_arr(n, 0) = candle_arr(n + 1, 0)
+                        candle_arr(n, 1) = candle_arr(n + 1, 1)
+                        candle_arr(n, 2) = candle_arr(n + 1, 2)
+                        candle_arr(n, 3) = candle_arr(n + 1, 3)
+                    End If
                 Next
 
-                candle_arr(Form1.candle_init_count - 1).open = open_price
-                candle_arr(Form1.candle_init_count - 1).high = high_price
-                candle_arr(Form1.candle_init_count - 1).low = low_price
-                candle_arr(Form1.candle_init_count - 1).close = last_price
+                candle_arr(Form1.candle_init_count - 1, 0) = open_price
+                candle_arr(Form1.candle_init_count - 1, 1) = high_price
+                candle_arr(Form1.candle_init_count - 1, 2) = low_price
+                candle_arr(Form1.candle_init_count - 1, 3) = last_price
 
-                If candle_arr(0).close <> "" Then
+                If candle_arr(0, 0) <> Nothing Then
                     ' start trading the strategy
                     live_updates_started = True
                     'RaiseEvent start_trading_strategy(candle_arr)
-                    sw.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.ffff"))
-                    sw.WriteLine(candle_arr(0))
-                    sw.WriteLine(candle_arr(1))
-                    sw.WriteLine(candle_arr(2))
-                    sw.WriteLine(candle_arr(3))
-                    sw.WriteLine(candle_arr(4))
+                    Open_str_wrt.str_wrt_1.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.ffff"))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(0, 0))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(0, 1))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(0, 2))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(0, 3))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(1, 0))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(1, 1))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(1, 2))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(1, 3))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(2, 0))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(2, 1))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(2, 2))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(2, 3))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(3, 0))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(3, 1))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(3, 2))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(3, 3))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(4, 0))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(4, 1))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(4, 2))
+                    Open_str_wrt.str_wrt_1.WriteLine(candle_arr(4, 3))
                 End If
             Case "intra-candle"
                 'RaiseEvent start_trading_strategy(candle_arr, open_price, high_price, low_price, last_price)
-                sw.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.ffff"))
-                sw.WriteLine(open_price, high_price, low_price, last_price)
-                sw.WriteLine("     ")
-                sw.Close()
+                Open_str_wrt.str_wrt_1.WriteLine(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.ffff"))
+                Open_str_wrt.str_wrt_1.WriteLine(open_price, high_price, low_price, last_price)
+                Open_str_wrt.str_wrt_1.WriteLine("     ")
         End Select
 
 

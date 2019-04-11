@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Imports System.ComponentModel
+Imports System.IO
 Imports IBApi
 
 Public Class Form1
@@ -94,17 +95,24 @@ Public Class Form1
     Private Sub btn_trade_last_tick_Click(sender As Object, e As EventArgs) Handles btn_trade_last_tick.Click
 
         auto_trading = True
-
+        Dim i_Open_str_wrt As Open_str_wrt = New Open_str_wrt
         If Form1.str_wrt_opened = False Then
-            Dim i_Open_str_wrt As Open_str_wrt = New Open_str_wrt
+            'Dim i_Open_str_wrt As Open_str_wrt = New Open_str_wrt
             Call i_Open_str_wrt.Open_str_wrt_method()
             Form1.str_wrt_opened = True
         End If
 
+        Call i_Open_str_wrt.Open_str_wrt_method_1()
         candle_resolution = CInt(tbx_candle_resolution.Text)
         candle_init_count = CInt(tbx_min_num_of_candles.Text)
 
         Call data_cls.req_data()
+
+    End Sub
+
+    Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+
+        Open_str_wrt.str_wrt_1.Close()
 
     End Sub
 End Class
