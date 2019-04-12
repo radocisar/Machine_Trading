@@ -328,7 +328,7 @@ Public Class EWrapperImpl
     Public Sub tickSize(tickerId As Integer, field As Integer, size As Integer) Implements IBApi.EWrapper.tickSize
         'Console.WriteLine("Tick Size. Ticker Id:" & CStr(tickerId) & ", Field: " & TickType.getField(field) & ", Size: " & CStr(size))
 
-        RaiseEvent on_size_return(tickerId, field, size)
+        'RaiseEvent on_size_return(tickerId, field, size)
 
     End Sub
     '! [ticksize]
