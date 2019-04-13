@@ -11,7 +11,7 @@ Public Class Candles_Creation_Data_Processing
     Private candle_arr(Form1.candle_init_count - 1, 3) As Double
     'Public candle_resolution As Integer = CInt(Form1.lbl_candle_resolution.Text)
     'Public candle_init_count As Integer = CInt(Form1.lbl_min_num_of_candles.Text)
-    Public Shared Event start_trading_strategy(ByVal candle_arr() As Candle, ByVal open_price As Double, ByVal high_price As Double, ByVal low_price As Double, ByVal last_price As Double)
+    Public Shared Event start_trading_strategy(ByVal candle_arr() As Double, ByVal open_price As Double, ByVal high_price As Double, ByVal low_price As Double, ByVal last_price As Double)
     Public live_updates_started As Boolean
     Public not_first_tick As Boolean
     Public first_top_of_minute_passed As Boolean
@@ -138,6 +138,7 @@ Public Class Candles_Creation_Data_Processing
                 candle_array_update_lock = False
                 Exit Sub
             End If
+
             'If (candle_start_time <= Current_time) And (Current_time <= candle_end_time) Then
             Do While pause_live_ticks = True
                 Continue Do
@@ -218,10 +219,11 @@ Public Class Candles_Creation_Data_Processing
                 candle_arr(Form1.candle_init_count - 1, 3) = candle_update_last_price
 
                 If candle_arr(0, 0) <> Nothing Then
-                    ' pause other live ticks which may have arrived outside of the candle creation if statement block
+                    ' pause other live ticks which may have arrived outside of the candle creation if-statement block
                     pause_live_ticks = True
                     ' start trading the strategy
                     live_updates_started = True
+                    'RaiseEvent start_trading_strategy(candle_arr, open_price, high_price, low_price, last_price)
                     Open_str_wrt.str_wrt_1.WriteLine(Current_time)
                     Open_str_wrt.str_wrt_1.WriteLine("Start: " & candle_start_time.AddSeconds(120) & "|" & "End: " & candle_end_time.AddSeconds(239))
                     Open_str_wrt.str_wrt_1.WriteLine("Candle 1 - O: " & candle_arr(0, 0))

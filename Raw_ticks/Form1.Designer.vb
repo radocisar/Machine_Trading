@@ -50,6 +50,8 @@ Partial Class Form1
         Me.lbl_std_dev = New System.Windows.Forms.Label()
         Me.lbl_min_num_of_candles = New System.Windows.Forms.Label()
         Me.tbx_min_num_of_candles = New System.Windows.Forms.TextBox()
+        Me.lbl_lookbck_for_calcs = New System.Windows.Forms.Label()
+        Me.tbx_lookback_for_calcs = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'btn_cnct
@@ -267,7 +269,7 @@ Partial Class Form1
         '
         'tbx_std_dev
         '
-        Me.tbx_std_dev.Location = New System.Drawing.Point(248, 282)
+        Me.tbx_std_dev.Location = New System.Drawing.Point(248, 270)
         Me.tbx_std_dev.Name = "tbx_std_dev"
         Me.tbx_std_dev.Size = New System.Drawing.Size(22, 20)
         Me.tbx_std_dev.TabIndex = 24
@@ -297,11 +299,29 @@ Partial Class Form1
         Me.tbx_min_num_of_candles.Size = New System.Drawing.Size(16, 20)
         Me.tbx_min_num_of_candles.TabIndex = 27
         '
+        'lbl_lookbck_for_calcs
+        '
+        Me.lbl_lookbck_for_calcs.AutoSize = True
+        Me.lbl_lookbck_for_calcs.Location = New System.Drawing.Point(281, 254)
+        Me.lbl_lookbck_for_calcs.Name = "lbl_lookbck_for_calcs"
+        Me.lbl_lookbck_for_calcs.Size = New System.Drawing.Size(92, 13)
+        Me.lbl_lookbck_for_calcs.TabIndex = 28
+        Me.lbl_lookbck_for_calcs.Text = "Lookbck for calcs"
+        '
+        'tbx_lookback_for_calcs
+        '
+        Me.tbx_lookback_for_calcs.Location = New System.Drawing.Point(294, 270)
+        Me.tbx_lookback_for_calcs.Name = "tbx_lookback_for_calcs"
+        Me.tbx_lookback_for_calcs.Size = New System.Drawing.Size(62, 20)
+        Me.tbx_lookback_for_calcs.TabIndex = 29
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(384, 345)
+        Me.Controls.Add(Me.tbx_lookback_for_calcs)
+        Me.Controls.Add(Me.lbl_lookbck_for_calcs)
         Me.Controls.Add(Me.tbx_min_num_of_candles)
         Me.Controls.Add(Me.lbl_min_num_of_candles)
         Me.Controls.Add(Me.lbl_std_dev)
@@ -366,4 +386,6 @@ Partial Class Form1
     Friend WithEvents lbl_std_dev As Label
     Friend WithEvents lbl_min_num_of_candles As Label
     Friend WithEvents tbx_min_num_of_candles As TextBox
+    Friend WithEvents lbl_lookbck_for_calcs As Label
+    Friend WithEvents tbx_lookback_for_calcs As TextBox
 End Class

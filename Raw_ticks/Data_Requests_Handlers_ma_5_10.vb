@@ -309,8 +309,6 @@ Public Class Data_Requests_Handlers_ma_5_10
 
         End If
 
-        'TODO Only if condition is re-met after a reversal (not every time conditions are met)
-
         'If ma_ticks_arr(7) <> Nothing And LAST_price <> "" Then
 
         'i_Raising_Orders.position_opened
