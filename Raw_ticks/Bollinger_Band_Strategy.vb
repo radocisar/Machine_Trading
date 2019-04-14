@@ -8,9 +8,6 @@
 
     Sub Bollinger_Band_Trading_Strategy(BB_candle_arr(,) As Double, open_price As Double, high_price As Double, low_price As Double, last_price As Double) Handles Candles_creation_data_processing_event.start_trading_strategy
 
-
-        Dim avg As 
-
         ' Shift all values by one so that last candle can be updated with latest data (open, high, low, close)
         For n = 0 To Form1.candle_init_count - 2
             BB_candle_arr(n, 0) = BB_candle_arr(n + 1, 0)
@@ -29,15 +26,15 @@
 #End Region
 
 #Region "Upper band"
-        upper_band =
+        upper_band = middle_band + (calculate_std(middle_band, BB_candle_arr) * Form1.tbx_std_dev)
 #End Region
 
 #Region "Lower band"
-        lower_band =
+        lower_band = middle_band - (calculate_std(middle_band, BB_candle_arr) * Form1.tbx_std_dev)
 #End Region
 
 #Region "Band span"
-        Upper_Lower_Band_Span =
+        Upper_Lower_Band_Span = upper_band - lower_band
 #End Region
 
     End Sub
@@ -55,7 +52,18 @@
 
     End Function
 
-    Function calculate_std()
+    Function calculate_std(middle_band As Double, BB_candle_arr(,) As Double)
+
+        Dim value_and_mean_diff As Double
+        Dim std As Double
+
+        For n = 0 To Form1.candle_init_count - 1
+            value_and_mean_diff = value_and_mean_diff + ((BB_candle_arr(n, 3) - middle_band) * (BB_candle_arr(n, 3) - middle_band))
+        Next
+
+        std = Math.Sqrt(value_and_mean_diff / BB_candle_arr.Length)
+
+        Return std
 
     End Function
 End Class

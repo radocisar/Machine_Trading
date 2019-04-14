@@ -11,7 +11,7 @@ Public Class Candles_Creation_Data_Processing
     Private candle_arr(Form1.candle_init_count - 1, 3) As Double
     'Public candle_resolution As Integer = CInt(Form1.lbl_candle_resolution.Text)
     'Public candle_init_count As Integer = CInt(Form1.lbl_min_num_of_candles.Text)
-    Public Shared Event start_trading_strategy(ByVal candle_arr() As Double, ByVal open_price As Double, ByVal high_price As Double, ByVal low_price As Double, ByVal last_price As Double)
+    Public Shared Event start_trading_strategy(ByVal candle_arr(,) As Double, ByVal open_price As Double, ByVal high_price As Double, ByVal low_price As Double, ByVal last_price As Double)
     Public live_updates_started As Boolean
     Public not_first_tick As Boolean
     Public first_top_of_minute_passed As Boolean
