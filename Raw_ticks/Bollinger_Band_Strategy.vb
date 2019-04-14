@@ -1,4 +1,6 @@
-﻿Public Class Bollinger_Band_Strategy
+﻿Imports System.Threading
+
+Public Class Bollinger_Band_Strategy
     Private WithEvents Candles_creation_data_processing_event As New Candles_Creation_Data_Processing
 
     Public upper_band As Double
@@ -60,6 +62,9 @@
 
         End If
 
+        Do While Properties_Class.position_entry_in_progress = True
+            Exit Sub
+        Loop
         If Properties_Class.position_opened = False Then
             ' Check entry trigger
             Call position_entry_test(Upper_Lower_Band_Span, upper_band, Prev_Candle_High_and_Close_above_U_Band, Prev_Candle_Low_and_Close_below_L_Band, high_price, low_price, last_price, Prev_low, Prev_high)
@@ -73,8 +78,12 @@
 
     Function position_entry_test(Upper_Lower_Band_Span As Double, upper_band As Double, Prev_Candle_High_and_Close_above_U_Band As Boolean, Prev_Candle_Low_and_Close_below_L_Band As Boolean, high_price As Double, low_price As Double, last_price As Double, Prev_low As Double, Prev_high As Double)
         ' Long entry check
+        Dim i_execute As Execute = New Execute
+        Dim i_Auto_open_trade_parameters As Auto_open_trade_parameters = New Auto_open_trade_parameters
+
         If Upper_Lower_Band_Span > 0.0015 And (((low_price < lower_band) And (last_price > lower_band)) Or ((Prev_Candle_Low_and_Close_below_L_Band = True) And (low_price > lower_band))) Then
             ' Assign trade opened flag
+            Properties_Class.position_entry_in_progress = True
             Properties_Class.long_position_opened = True
 
             ' Assign stop price
@@ -89,12 +98,19 @@
             End If
 
             ' Execute long entry trade
+            Dim exec_thrd As Thread
 
+            exec_thrd = New Thread(AddressOf i_execute.execute_in_ord_LMT)
+            i_Auto_open_trade_parameters.Auto_open_trade_action = "BUY"
+            i_Auto_open_trade_parameters.Auto_open_trade_price = last_price
+            exec_thrd.Start(i_Auto_open_trade_parameters)
+            exec_thrd.Join()
         End If
 
         ' Short entry check
         If Upper_Lower_Band_Span > 0.0015 And (((high_price > upper_band) And (last_price < upper_band)) Or ((Prev_Candle_High_and_Close_above_U_Band = True) And (low_price < upper_band))) Then
             ' Assign trade opened flag
+            Properties_Class.position_entry_in_progress = True
             Properties_Class.short_position_opened = True
 
             ' Assign stop price
@@ -109,7 +125,13 @@
             End If
 
             ' Execute short entry trade
+            Dim exec_thrd As Thread
 
+            exec_thrd = New Thread(AddressOf i_execute.execute_in_ord_LMT)
+            i_Auto_open_trade_parameters.Auto_open_trade_action = "SELL"
+            i_Auto_open_trade_parameters.Auto_open_trade_price = last_price
+            exec_thrd.Start(i_Auto_open_trade_parameters)
+            exec_thrd.Join()
         End If
 
     End Function
@@ -118,12 +140,14 @@
         ' Long position check
         If Properties_Class.long_position_opened = True Then
             If last_price < Properties_Class.stop_price Then
+                Properties_Class.long_position_opened = False
                 ' Execute take stop trade
 
             End If
             ' Short position check
         ElseIf Properties_Class.short_position_opened = True Then
             If last_price > Properties_Class.stop_price Then
+                Properties_Class.short_position_opened = False
                 ' Execute take stop trade
 
             End If
@@ -134,11 +158,13 @@
     Function take_profit_check(last_price As Double, middle_band As Double)
         ' Long position check
         If last_price > middle_band + 0.001 And Properties_Class.long_position_opened = True Then
+            Properties_Class.long_position_opened = False
             ' Execute take proift trade
 
         End If
         ' Short position check
         If last_price < middle_band - 0.001 And Properties_Class.short_position_opened = True Then
+            Properties_Class.short_position_opened = False
             ' Execute take proift trade
 
         End If

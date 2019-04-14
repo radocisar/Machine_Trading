@@ -27,10 +27,10 @@ Public Class Execute
 
         If i_ordr.Action = "BUY" Then
             'For testing
-            i_ordr.LmtPrice = i_Auto_open_trade_parameters.Auto_open_trade_price - 1 '+ 0.05
+            i_ordr.LmtPrice = i_Auto_open_trade_parameters.Auto_open_trade_price - 1 '+ 0.0005
         Else
             'For testing
-            i_ordr.LmtPrice = i_Auto_open_trade_parameters.Auto_open_trade_price + 1 '- 0.05
+            i_ordr.LmtPrice = i_Auto_open_trade_parameters.Auto_open_trade_price + 1 '- 0.0005
         End If
 
         i_ordr.TotalQuantity = i_Auto_open_trade_parameters.Auto_open_trade_size

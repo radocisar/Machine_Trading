@@ -87,6 +87,7 @@ Public Class Raising_Orders
 
             'position_opened = True
             Properties_Class.position_opened = True
+            Properties_Class.position_entry_in_progress = False
         End If
         'TODO Add filled order confirmation "status" and ensure this is only considered upon exiting of position
         If status = "submitted" Or status = "PreSubmitted" And Execute.position_opened_or_closed = "Closed" Then
