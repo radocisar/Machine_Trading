@@ -129,6 +129,7 @@ Public Class Candles_Creation_Data_Processing
 
                 thrd_candle_creation = New Thread(Sub() candle_array(candle_update_open_price, candle_update_high_price, candle_update_low_price, candle_update_last_price, "new-candle", Current_time))
                 thrd_candle_creation.Start()
+                thrd_candle_creation.Join()
                 'Call candle_array(candle_update_open_price, candle_update_high_price, candle_update_low_price, candle_update_last_price, "new-candle", Current_time)
 
                 'volume =
@@ -284,9 +285,9 @@ Public Class Candles_Creation_Data_Processing
         current_midnight = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0)
 
         For n = 0 To ((1440 / Form1.candle_resolution) - 1)
-            intermediate_end_time = current_midnight.AddMinutes((n + 1) * Form1.candle_resolution - 1)
+            intermediate_end_time = current_midnight.AddMinutes(((n + 1) * Form1.candle_resolution) - 1)
             If (current_midnight.AddMinutes(n * Form1.candle_resolution) < Current_time) And (Current_time < intermediate_end_time.AddSeconds(59)) Then
-                Return intermediate_end_time.AddSeconds(59)
+                Return intermediate_end_time
             End If
         Next
 
