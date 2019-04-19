@@ -32,6 +32,7 @@ Public Class Candles_Creation_Data_Processing
     Private start_candles_population As Boolean
     Private candle_array_update_lock As Boolean
     Public pause_live_ticks As Boolean
+    Public Tick_still_processing As Boolean
 
 
     'Dim sw As StreamWriter
@@ -71,6 +72,13 @@ Public Class Candles_Creation_Data_Processing
         End If
 
 #Region "Filling in minutely candles"
+
+        ' Ensures that a tick, with its current time value, is fully processed before next tick gets to up Current_time
+        Do While Tick_still_processing = True
+            Continue Do
+        Loop
+
+        Tick_still_processing = True
 
         Current_time = DateTime.Now
 
@@ -193,6 +201,7 @@ Public Class Candles_Creation_Data_Processing
         'End If
 
         'mls_200 = New TimeSpan(0, 0, 0, 0, 200)
+        Tick_still_processing = False
 
     End Sub
 #End Region
@@ -287,7 +296,7 @@ Public Class Candles_Creation_Data_Processing
         For n = 0 To ((1440 / Form1.candle_resolution) - 1)
             intermediate_end_time = current_midnight.AddMinutes(((n + 1) * Form1.candle_resolution) - 1)
             If (current_midnight.AddMinutes(n * Form1.candle_resolution) < Current_time) And (Current_time < intermediate_end_time.AddSeconds(59)) Then
-                Return intermediate_end_time
+                Return intermediate_end_time.AddSeconds(59)
             End If
         Next
 
