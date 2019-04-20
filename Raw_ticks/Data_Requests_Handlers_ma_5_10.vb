@@ -138,8 +138,6 @@ Public Class Data_Requests_Handlers_ma_5_10
 
                 End If
 
-                'TODO Only if condition is re-met after a reversal (not every time conditions are met)
-
                 'If ma_ticks_arr(7) <> Nothing And LAST_price <> "" Then
                 If ma_ticks_arr(0) <> Nothing And LAST_price <> "" Then
 
@@ -299,7 +297,6 @@ Public Class Data_Requests_Handlers_ma_5_10
             i_Open_positions_cond_analysis_ma_5_10.price_for_exit_calc = ma_ticks_arr(10)
             thrd_open_pos_cond_analysis = New Thread(AddressOf i_Open_positions_cond_analysis_ma_5_10.open_positions_cond_analysis_ma_5_over_10)
             'For testing
-            'TODO - To be removed for continuous trading
             If first_exit_trade = True Then
 
             Else

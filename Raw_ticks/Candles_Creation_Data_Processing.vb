@@ -234,35 +234,32 @@ Public Class Candles_Creation_Data_Processing
                     ' start trading the strategy
                     live_updates_started = True
                     'RaiseEvent start_trading_strategy(candle_arr, open_price, high_price, low_price, last_price)
-                    Open_str_wrt.str_wrt_1.WriteLine(Current_time)
-                    Open_str_wrt.str_wrt_1.WriteLine("Start: " & candle_start_time.AddSeconds(120) & "|" & "End: " & candle_end_time.AddSeconds(239))
-                    Open_str_wrt.str_wrt_1.WriteLine("Candle 1 - O: " & candle_arr(0, 0))
-                    Open_str_wrt.str_wrt_1.WriteLine("Candle 1 - H: " & candle_arr(0, 1))
-                    Open_str_wrt.str_wrt_1.WriteLine("Candle 1 - L: " & candle_arr(0, 2))
-                    Open_str_wrt.str_wrt_1.WriteLine("Candle 1 - C: " & candle_arr(0, 3))
-                    Open_str_wrt.str_wrt_1.WriteLine("Candle 2 - O: " & candle_arr(1, 0))
-                    Open_str_wrt.str_wrt_1.WriteLine("Candle 2 - H: " & candle_arr(1, 1))
-                    Open_str_wrt.str_wrt_1.WriteLine("Candle 2 - L: " & candle_arr(1, 2))
-                    Open_str_wrt.str_wrt_1.WriteLine("Candle 2 - C: " & candle_arr(1, 3))
-                    Open_str_wrt.str_wrt_1.WriteLine("Candle 3 - O: " & candle_arr(2, 0))
-                    Open_str_wrt.str_wrt_1.WriteLine("Candle 3 - H: " & candle_arr(2, 1))
-                    Open_str_wrt.str_wrt_1.WriteLine("Candle 3 - L: " & candle_arr(2, 2))
-                    Open_str_wrt.str_wrt_1.WriteLine("Candle 3 - C: " & candle_arr(2, 3))
-                    'Open_str_wrt.str_wrt_1.WriteLine("Candle 4 - O: " & candle_arr(3, 0))
-                    'Open_str_wrt.str_wrt_1.WriteLine("Candle 4 - H: " & candle_arr(3, 1))
-                    'Open_str_wrt.str_wrt_1.WriteLine("Candle 4 - L: " & candle_arr(3, 2))
-                    'Open_str_wrt.str_wrt_1.WriteLine("Candle 4 - C: " & candle_arr(3, 3))
-                    'Open_str_wrt.str_wrt_1.WriteLine("Candle 5 - O: " & candle_arr(4, 0))
-                    'Open_str_wrt.str_wrt_1.WriteLine("Candle 5 - H: " & candle_arr(4, 1))
-                    'Open_str_wrt.str_wrt_1.WriteLine("Candle 5 - L: " & candle_arr(4, 2))
-                    'Open_str_wrt.str_wrt_1.WriteLine("Candle 5 - C: " & candle_arr(4, 3))
+                    'Open_str_wrt.str_wrt_1.WriteLine("Start: " & candle_start_time & "|" & "End: " & candle_end_time)
+                    'Open_str_wrt.str_wrt_1.WriteLine("Open: " & candle_arr(Form1.candle_init_count - 1, 0))
+                    'Open_str_wrt.str_wrt_1.WriteLine("High: " & candle_arr(Form1.candle_init_count - 1, 1))
+                    'Open_str_wrt.str_wrt_1.WriteLine("Low: " & candle_arr(Form1.candle_init_count - 1, 2))
+                    'Open_str_wrt.str_wrt_1.WriteLine("Close: " & candle_arr(Form1.candle_init_count - 1, 3))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine(Current_time)
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Start: " & candle_start_time & "|" & "End: " & candle_end_time)
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 1 - O: " & candle_arr(0, 0))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 1 - H: " & candle_arr(0, 1))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 1 - L: " & candle_arr(0, 2))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 1 - C: " & candle_arr(0, 3))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 2 - O: " & candle_arr(1, 0))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 2 - H: " & candle_arr(1, 1))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 2 - L: " & candle_arr(1, 2))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 2 - C: " & candle_arr(1, 3))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 3 - O: " & candle_arr(2, 0))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 3 - H: " & candle_arr(2, 1))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 3 - L: " & candle_arr(2, 2))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 3 - C: " & candle_arr(2, 3))
                 End If
             Case "intra-candle"
                 'RaiseEvent start_trading_strategy(candle_arr, open_price, high_price, low_price, last_price)
-                Open_str_wrt.str_wrt_1.WriteLine(Current_time)
-                Open_str_wrt.str_wrt_1.WriteLine(candle_start_time & "|" & candle_end_time)
-                Open_str_wrt.str_wrt_1.WriteLine(open_price & "|" & high_price & "|" & low_price & "|" & last_price)
-                Open_str_wrt.str_wrt_1.WriteLine("     ")
+                Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine(Current_time)
+                Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine(candle_start_time & "|" & candle_end_time)
+                Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine(open_price & "|" & high_price & "|" & low_price & "|" & last_price)
+                Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("     ")
                 pause_live_ticks = False
         End Select
 
@@ -273,32 +270,40 @@ Public Class Candles_Creation_Data_Processing
 #Region "Functions"
     Function Calculate_start_time_of_candle(Current_time As DateTime)
 
-        Dim current_midnight As DateTime
+        Dim current_hour As DateTime
 
-        current_midnight = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0)
+        current_hour = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, Current_time.Hour, 0, 0)
 
-        For n = 0 To ((1440 / Form1.candle_resolution) - 1)
-            If (current_midnight.AddMinutes(n * Form1.candle_resolution) < Current_time) And (Current_time < current_midnight.AddMinutes((n + 1) * Form1.candle_resolution)) Then
-                Return current_midnight.AddMinutes(n * Form1.candle_resolution)
-            End If
-        Next
+        Try
+            For n = 0 To ((60 / Form1.candle_resolution) - 1)
+                If (current_hour.AddMinutes(n * Form1.candle_resolution) < Current_time) And (Current_time < current_hour.AddMinutes((n + 1) * Form1.candle_resolution)) Then
+                    Return current_hour.AddMinutes(n * Form1.candle_resolution)
+                End If
+            Next
+        Catch ex As Exception
+            MsgBox("Candle Resolution has to be <= 60 mins")
+        End Try
 
     End Function
 
     Function Calculate_end_time_of_candle(Current_time As DateTime)
 
-        Dim current_midnight As DateTime
+        Dim current_hour As DateTime
         Dim intermediate_end_time As DateTime
 
 
-        current_midnight = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, 0, 0, 0)
+        current_hour = New DateTime(Current_time.Year, Current_time.Month, Current_time.Day, Current_time.Hour, 0, 0)
 
-        For n = 0 To ((1440 / Form1.candle_resolution) - 1)
-            intermediate_end_time = current_midnight.AddMinutes(((n + 1) * Form1.candle_resolution) - 1)
-            If (current_midnight.AddMinutes(n * Form1.candle_resolution) < Current_time) And (Current_time < intermediate_end_time.AddSeconds(59)) Then
-                Return intermediate_end_time.AddSeconds(59)
-            End If
-        Next
+        Try
+            For n = 0 To ((60 / Form1.candle_resolution) - 1)
+                intermediate_end_time = current_hour.AddMinutes(((n + 1) * Form1.candle_resolution) - 1)
+                If (current_hour.AddMinutes(n * Form1.candle_resolution) < Current_time) And (Current_time < intermediate_end_time.AddSeconds(59)) Then
+                    Return intermediate_end_time.AddSeconds(59)
+                End If
+            Next
+        Catch ex As Exception
+            MsgBox("Candle Resolution has to be <= 60 mins")
+        End Try
 
     End Function
 #End Region

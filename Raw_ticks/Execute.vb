@@ -50,7 +50,6 @@ Public Class Execute
         'Dim str_wrt As StreamWriter = New StreamWriter("C:\Raw_Data\Logging _Auto_Trading\log.txt", True)
 
         If i_ordr.Action = "BUY" Then
-            'TODO Create a class/method for writting to file
             Log_to_file.main_lbl = "Opening Long Execution Details"
             Log_to_file.i_ordr_Action_lbl = "Action="
             Log_to_file.price_lbl = "Price="

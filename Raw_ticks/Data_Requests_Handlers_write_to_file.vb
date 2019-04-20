@@ -16,8 +16,6 @@ Public Class Data_Requests_Handlers_write_to_file
 
         'prc = price
 
-        'TODO Ensure dobule ticking is reviewed and resolved
-
         If File.Exists(Create_new_folder_for_cntrt.file_path & file_txt) = False Then
             bln = True
         End If
