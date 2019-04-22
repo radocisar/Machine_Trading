@@ -102,7 +102,7 @@ Public Class Form1
             Form1.str_wrt_opened = True
         End If
 
-        Call i_Open_str_wrt.Open_str_wrt_method_1()
+        Call i_Open_str_wrt.Open_str_wrt_method_for_Candles_Logging()
         candle_resolution = CInt(tbx_candle_resolution.Text)
         candle_init_count = CInt(tbx_min_num_of_candles.Text)
 
@@ -112,7 +112,7 @@ Public Class Form1
 
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
 
-        Open_str_wrt.str_wrt_1.Close()
+        Open_str_wrt.str_wrt_for_Candles_Logging.Close()
 
     End Sub
 End Class

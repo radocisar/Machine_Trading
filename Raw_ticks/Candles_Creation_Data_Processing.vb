@@ -104,6 +104,7 @@ Public Class Candles_Creation_Data_Processing
                 last_price = current_price
                 'volume =
             Else
+                Tick_still_processing = False
                 Exit Sub
             End If
         End If
@@ -117,6 +118,7 @@ Public Class Candles_Creation_Data_Processing
                 If candle_array_update_lock = True Then ' In conjunction with "candle_start_time > prev_candle_start_time" ensures that while candle_update_* prices are being updated with the completed candle's last values no other tick comes through 
                     'to update them again while another tick may have updated open_price, high_price, low_price and last_price meanwhile. All such ticks are discarted (there is very likely to be very few of these)
                     Do While candle_start_time > prev_candle_start_time
+                        'Tick_still_processing = False
                         Exit Sub
                     Loop
                 End If
@@ -145,6 +147,7 @@ Public Class Candles_Creation_Data_Processing
                     Call candle_array(open_price, high_price, low_price, last_price, "intra-candle", Current_time)
                 End If
                 candle_array_update_lock = False
+                Tick_still_processing = False
                 Exit Sub
             End If
 
@@ -233,14 +236,17 @@ Public Class Candles_Creation_Data_Processing
                     pause_live_ticks = True
                     ' start trading the strategy
                     live_updates_started = True
+                    Dim date_span_to_subtract_for_logging As TimeSpan
+                    date_span_to_subtract_for_logging = New TimeSpan(0, 0, Form1.candle_resolution, 0, 0)
                     'RaiseEvent start_trading_strategy(candle_arr, open_price, high_price, low_price, last_price)
+                    ' On new thread:
                     'Open_str_wrt.str_wrt_1.WriteLine("Start: " & candle_start_time & "|" & "End: " & candle_end_time)
                     'Open_str_wrt.str_wrt_1.WriteLine("Open: " & candle_arr(Form1.candle_init_count - 1, 0))
                     'Open_str_wrt.str_wrt_1.WriteLine("High: " & candle_arr(Form1.candle_init_count - 1, 1))
                     'Open_str_wrt.str_wrt_1.WriteLine("Low: " & candle_arr(Form1.candle_init_count - 1, 2))
                     'Open_str_wrt.str_wrt_1.WriteLine("Close: " & candle_arr(Form1.candle_init_count - 1, 3))
                     Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine(Current_time)
-                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Start: " & candle_start_time & "|" & "End: " & candle_end_time)
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Start: " & candle_start_time.Subtract(date_span_to_subtract_for_logging) & "|" & "End: " & candle_end_time.Subtract(date_span_to_subtract_for_logging))
                     Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 1 - O: " & candle_arr(0, 0))
                     Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 1 - H: " & candle_arr(0, 1))
                     Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 1 - L: " & candle_arr(0, 2))
