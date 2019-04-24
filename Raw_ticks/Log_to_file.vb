@@ -30,4 +30,38 @@ Public Class Log_to_file
 
     End Sub
 
+    Public Shared Sub Log_to_file_method_for_candles_logging(origin As String, Current_time As DateTime, candle_start_time As DateTime, candle_end_time As DateTime, date_span_to_subtract_for_logging As TimeSpan, candle_arr(,) As Double,
+                                                             open_price As Double, high_price As Double, low_price As Double, last_price As Double)
+
+        Select Case origin
+            Case "new-candle"
+                Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine(Current_time)
+                Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Start: " & candle_start_time.Subtract(date_span_to_subtract_for_logging) & "|" & "End: " & candle_end_time.Subtract(date_span_to_subtract_for_logging))
+                For n = 0 To Form1.candle_init_count - 1
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle " & n + 1 & " - O: " & candle_arr(n, 0))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle " & n + 1 & " - H: " & candle_arr(n, 1))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle " & n + 1 & " - L: " & candle_arr(n, 2))
+                    Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle " & n + 1 & " - C: " & candle_arr(n, 3))
+                Next
+                'Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 1 - O: " & candle_arr(0, 0))
+                'Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 1 - H: " & candle_arr(0, 1))
+                'Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 1 - L: " & candle_arr(0, 2))
+                'Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 1 - C: " & candle_arr(0, 3))
+                'Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 2 - O: " & candle_arr(1, 0))
+                'Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 2 - H: " & candle_arr(1, 1))
+                'Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 2 - L: " & candle_arr(1, 2))
+                'Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 2 - C: " & candle_arr(1, 3))
+                'Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 3 - O: " & candle_arr(2, 0))
+                'Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 3 - H: " & candle_arr(2, 1))
+                'Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 3 - L: " & candle_arr(2, 2))
+                'Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Candle 3 - C: " & candle_arr(2, 3))
+            Case "intra-candle"
+                Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine(Current_time)
+                Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine(candle_start_time & "|" & candle_end_time)
+                Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine(open_price & "|" & high_price & "|" & low_price & "|" & last_price)
+                Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("     ")
+        End Select
+
+    End Sub
+
 End Class
