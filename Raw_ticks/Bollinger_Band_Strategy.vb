@@ -81,7 +81,7 @@ Public Class Bollinger_Band_Strategy
         Dim i_execute As Execute = New Execute
         Dim i_Auto_open_trade_parameters As Auto_open_trade_parameters = New Auto_open_trade_parameters
 
-        If Upper_Lower_Band_Span > 0.0015 And (((low_price < lower_band) And (last_price > lower_band)) Or ((Prev_Candle_Low_and_Close_below_L_Band = True) And (low_price > lower_band))) Then
+        If Upper_Lower_Band_Span > 0.0015 And (((low_price < lower_band) And (last_price > lower_band)) Or ((Prev_Candle_Low_and_Close_below_L_Band = True) And (last_price > lower_band))) Then
             ' Assign trade opened flag
             Properties_Class.position_entry_in_progress = True
             Properties_Class.long_position_opened = True
@@ -108,7 +108,7 @@ Public Class Bollinger_Band_Strategy
         End If
 
         ' Short entry check
-        If Upper_Lower_Band_Span > 0.0015 And (((high_price > upper_band) And (last_price < upper_band)) Or ((Prev_Candle_High_and_Close_above_U_Band = True) And (low_price < upper_band))) Then
+        If Upper_Lower_Band_Span > 0.0015 And (((high_price > upper_band) And (last_price < upper_band)) Or ((Prev_Candle_High_and_Close_above_U_Band = True) And (last_price < upper_band))) Then
             ' Assign trade opened flag
             Properties_Class.position_entry_in_progress = True
             Properties_Class.short_position_opened = True
@@ -137,36 +137,66 @@ Public Class Bollinger_Band_Strategy
     End Function
 
     Function stop_loss_check(last_price As Double)
+        Dim i_execute As Execute = New Execute
+        Dim i_Auto_open_trade_parameters As Auto_open_trade_parameters = New Auto_open_trade_parameters
+
         ' Long position check
         If Properties_Class.long_position_opened = True Then
             If last_price < Properties_Class.stop_price Then
                 Properties_Class.long_position_opened = False
                 ' Execute take stop trade
+                Dim stop_loss_exec_thrd As Thread
 
+                stop_loss_exec_thrd = New Thread(AddressOf i_execute.execute_in_ord_LMT)
+                i_Auto_open_trade_parameters.Auto_open_trade_action = "SELL"
+                i_Auto_open_trade_parameters.Auto_open_trade_price = last_price
+                stop_loss_exec_thrd.Start(i_Auto_open_trade_parameters)
+                stop_loss_exec_thrd.Join()
             End If
             ' Short position check
         ElseIf Properties_Class.short_position_opened = True Then
             If last_price > Properties_Class.stop_price Then
                 Properties_Class.short_position_opened = False
                 ' Execute take stop trade
+                Dim stop_loss_exec_thrd As Thread
 
+                stop_loss_exec_thrd = New Thread(AddressOf i_execute.execute_in_ord_LMT)
+                i_Auto_open_trade_parameters.Auto_open_trade_action = "BUY"
+                i_Auto_open_trade_parameters.Auto_open_trade_price = last_price
+                stop_loss_exec_thrd.Start(i_Auto_open_trade_parameters)
+                stop_loss_exec_thrd.Join()
             End If
         End If
 
     End Function
 
     Function take_profit_check(last_price As Double, middle_band As Double)
+        Dim i_execute As Execute = New Execute
+        Dim i_Auto_open_trade_parameters As Auto_open_trade_parameters = New Auto_open_trade_parameters
+
         ' Long position check
         If last_price > middle_band + 0.001 And Properties_Class.long_position_opened = True Then
             Properties_Class.long_position_opened = False
             ' Execute take proift trade
+            Dim take_profit_exec_thrd As Thread
 
+            take_profit_exec_thrd = New Thread(AddressOf i_execute.execute_in_ord_LMT)
+            i_Auto_open_trade_parameters.Auto_open_trade_action = "SELL"
+            i_Auto_open_trade_parameters.Auto_open_trade_price = last_price
+            take_profit_exec_thrd.Start(i_Auto_open_trade_parameters)
+            take_profit_exec_thrd.Join()
         End If
         ' Short position check
         If last_price < middle_band - 0.001 And Properties_Class.short_position_opened = True Then
             Properties_Class.short_position_opened = False
             ' Execute take proift trade
+            Dim take_profit_exec_thrd As Thread
 
+            take_profit_exec_thrd = New Thread(AddressOf i_execute.execute_in_ord_LMT)
+            i_Auto_open_trade_parameters.Auto_open_trade_action = "BUY"
+            i_Auto_open_trade_parameters.Auto_open_trade_price = last_price
+            take_profit_exec_thrd.Start(i_Auto_open_trade_parameters)
+            take_profit_exec_thrd.Join()
         End If
 
     End Function
