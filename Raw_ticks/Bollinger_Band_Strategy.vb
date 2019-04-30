@@ -59,7 +59,12 @@ Public Class Bollinger_Band_Strategy
             If Properties_Class.stp_loss_chck_in_progress = True Then
             Else
                 Properties_Class.stp_loss_chck_in_progress = True
-                Call stop_loss_check(last_price)
+                Dim stp_loss_check_thrd As Thread
+
+                stp_loss_check_thrd = New Thread(AddressOf stop_loss_check)
+                stp_loss_check_thrd.)
+                stp_loss_check_thrd.Join()
+                'Call stop_loss_check(last_price)
                 Properties_Class.stp_loss_chck_in_progress = False
             End If
         End If
@@ -69,7 +74,12 @@ Public Class Bollinger_Band_Strategy
             If Properties_Class.take_prft_chck_in_progress = True Then
             Else
                 Properties_Class.take_prft_chck_in_progress = True
-                Call take_profit_check(last_price, middle_band)
+                Dim take_prft_check_thrd As Thread
+
+                take_prft_check_thrd = New Thread(Sub() take_profit_check(last_price, middle_band))
+                take_prft_check_thrd.Start()
+                take_prft_check_thrd.Join()
+                'Call take_profit_check(last_price, middle_band)
                 Properties_Class.take_prft_chck_in_progress = False
             End If
         End If
