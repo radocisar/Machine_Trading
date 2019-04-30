@@ -54,12 +54,24 @@ Public Class Bollinger_Band_Strategy
         ' Previous high
         Prev_high = BB_candle_arr(Form1.candle_init_count - 2, 1)
 
+        ' Check for stop loss trigger
         If Properties_Class.position_opened = True Then
+            If Properties_Class.stp_loss_chck_in_progress = True Then
+            Else
+                Properties_Class.stp_loss_chck_in_progress = True
+                Call stop_loss_check(last_price)
+                Properties_Class.stp_loss_chck_in_progress = False
+            End If
+        End If
 
-            ' Check for stop loss trigger
-
-            ' Check for take profit trigger
-
+        ' Check for take profit trigger
+        If Properties_Class.position_opened = True Then
+            If Properties_Class.take_prft_chck_in_progress = True Then
+            Else
+                Properties_Class.take_prft_chck_in_progress = True
+                Call take_profit_check(last_price, middle_band)
+                Properties_Class.take_prft_chck_in_progress = False
+            End If
         End If
 
         Do While Properties_Class.position_entry_in_progress = True
