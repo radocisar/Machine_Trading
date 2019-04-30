@@ -62,7 +62,7 @@ Public Class Bollinger_Band_Strategy
                 Dim stp_loss_check_thrd As Thread
 
                 stp_loss_check_thrd = New Thread(AddressOf stop_loss_check)
-                stp_loss_check_thrd.)
+                stp_loss_check_thrd.Start()
                 stp_loss_check_thrd.Join()
                 'Call stop_loss_check(last_price)
                 Properties_Class.stp_loss_chck_in_progress = False
