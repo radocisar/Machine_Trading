@@ -54,6 +54,13 @@ Public Class Bollinger_Band_Strategy
         ' Previous high
         Prev_high = BB_candle_arr(Form1.candle_init_count - 2, 1)
 
+        'For Testing:
+        If Raising_Orders.test_completed = True Then
+
+            MsgBox("Testing completed - trade roundtrip completed")
+
+        End If
+
         ' Check for stop loss trigger
         If Properties_Class.position_opened = True Then
             If Properties_Class.stp_loss_chck_in_progress = True Then
@@ -84,11 +91,11 @@ Public Class Bollinger_Band_Strategy
             End If
         End If
 
+        ' Check entry trigger
         Do While Properties_Class.position_entry_in_progress = True
             Exit Sub
         Loop
         If Properties_Class.position_opened = False Then
-            ' Check entry trigger
             Call position_entry_test(Upper_Lower_Band_Span, upper_band, Prev_Candle_High_and_Close_above_U_Band, Prev_Candle_Low_and_Close_below_L_Band, high_price, low_price, last_price, Prev_low, Prev_high)
 
         End If
@@ -103,7 +110,7 @@ Public Class Bollinger_Band_Strategy
         Dim i_execute As Execute = New Execute
         Dim i_Auto_open_trade_parameters As Auto_open_trade_parameters = New Auto_open_trade_parameters
 
-        If Upper_Lower_Band_Span > 0.0015 And (((low_price < lower_band) And (last_price > lower_band)) Or ((Prev_Candle_Low_and_Close_below_L_Band = True) And (last_price > lower_band))) Then
+        If Upper_Lower_Band_Span > 0.0004 And (((low_price < lower_band) And (last_price > lower_band)) Or ((Prev_Candle_Low_and_Close_below_L_Band = True) And (last_price > lower_band))) Then
             ' Assign trade opened flag
             Properties_Class.position_entry_in_progress = True
             Properties_Class.long_position_opened = True
