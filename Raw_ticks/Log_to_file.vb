@@ -16,6 +16,7 @@ Public Class Log_to_file
     Public Shared ma_10_ticks_for_exit_calc_lbl As String
     Public Shared thread_lock As New Object
     Public Shared thread_lock_for_candles_logging As New Object
+    Public Shared thread_lock_for_execution_logging As New Object
 
 
     Public Shared Sub Log_to_file_method(Action As String, price As Double, Quantity As Integer, OrderType As String, orderId As Integer, status As String, ma_5_ticks As Double, ma_5_ticks_prior_per As Double, ma_10_ticks As Double,
@@ -67,4 +68,22 @@ Public Class Log_to_file
         End SyncLock
     End Sub
 
+    Public Shared Sub Log_to_file_method_for_execution(Log_Upper_Lower_Band_Span As Double, Log_upper_band As Double, Log_Prev_Candle_High_and_Close_above_U_Band As Double, Log_Prev_Candle_Low_and_Close_below_L_Band As Double, Log_high_price As Double,
+                                                       Log_low_price As Double, Log_last_price As Double, Log_Prev_low As Double, Log_Prev_high As Double)
+
+        SyncLock thread_lock_for_execution_logging
+            Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine(DateTime.Now)
+            Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Execution Details: " & vbCrLf &
+                                                               "Upper_Lower_Band_Span: " & Log_Upper_Lower_Band_Span & vbCrLf &
+                                                               "Upper_band: " & Log_upper_band & vbCrLf &
+                                                               "Prev_Candle_High_and_Close_above_U_Band: " & Log_Prev_Candle_High_and_Close_above_U_Band & vbCrLf &
+                                                               "Prev_Candle_Low_and_Close_below_L_Band: " & Log_Prev_Candle_Low_and_Close_below_L_Band & vbCrLf &
+                                                               "high_price: " & Log_high_price & vbCrLf &
+                                                               "low_price: " & Log_low_price & vbCrLf &
+                                                               "last_price: " & Log_last_price & vbCrLf &
+                                                               "Prev_low: " & Log_Prev_low & vbCrLf &
+                                                               "Prev_high: " & Log_Prev_high)
+            Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("     ")
+        End SyncLock
+    End Sub
 End Class

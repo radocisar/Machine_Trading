@@ -96,8 +96,17 @@ Public Class Bollinger_Band_Strategy
             Exit Sub
         Loop
         If Properties_Class.position_opened = False Then
-            Call position_entry_test(Upper_Lower_Band_Span, upper_band, Prev_Candle_High_and_Close_above_U_Band, Prev_Candle_Low_and_Close_below_L_Band, high_price, low_price, last_price, Prev_low, Prev_high)
-
+            MsgBox("Position entry check initiated with:" & vbCrLf &
+                   "Upper_Lower_Band_Span: " & Upper_Lower_Band_Span & vbCrLf &
+                   "Upper_band: " & upper_band & vbCrLf &
+                   "Prev_Candle_High_and_Close_above_U_Band: " & Prev_Candle_High_and_Close_above_U_Band & vbCrLf &
+                   "Prev_Candle_Low_and_Close_below_L_Band: " & Prev_Candle_Low_and_Close_below_L_Band & vbCrLf &
+                   "high_price: " & high_price & vbCrLf &
+                   "low_price: " & low_price & vbCrLf &
+                   "last_price: " & last_price & vbCrLf &
+                   "Prev_low: " & Prev_low & vbCrLf &
+                   "Prev_high: " & Prev_high)
+            position_entry_test(Upper_Lower_Band_Span, upper_band, Prev_Candle_High_and_Close_above_U_Band, Prev_Candle_Low_and_Close_below_L_Band, high_price, low_price, last_price, Prev_low, Prev_high)
         End If
 
 #End Region
@@ -106,11 +115,31 @@ Public Class Bollinger_Band_Strategy
     End Sub
 
     Function position_entry_test(Upper_Lower_Band_Span As Double, upper_band As Double, Prev_Candle_High_and_Close_above_U_Band As Boolean, Prev_Candle_Low_and_Close_below_L_Band As Boolean, high_price As Double, low_price As Double, last_price As Double, Prev_low As Double, Prev_high As Double)
-        ' Long entry check
         Dim i_execute As Execute = New Execute
         Dim i_Auto_open_trade_parameters As Auto_open_trade_parameters = New Auto_open_trade_parameters
+        Dim Log_Upper_Lower_Band_Span As Double
+        Dim Log_upper_band As Double
+        Dim Log_Prev_Candle_High_and_Close_above_U_Band As Double
+        Dim Log_Prev_Candle_Low_and_Close_below_L_Band As Double
+        Dim Log_high_price As Double
+        Dim Log_low_price As Double
+        Dim Log_last_price As Double
+        Dim Log_Prev_low As Double
+        Dim Log_Prev_high As Double
 
-        If Upper_Lower_Band_Span > 0.0004 And (((low_price < lower_band) And (last_price > lower_band)) Or ((Prev_Candle_Low_and_Close_below_L_Band = True) And (last_price > lower_band))) Then
+        ' Technicals for logging
+        Log_Upper_Lower_Band_Span = Upper_Lower_Band_Span
+        Log_upper_band = upper_band
+        Log_Prev_Candle_High_and_Close_above_U_Band = Prev_Candle_High_and_Close_above_U_Band
+        Log_Prev_Candle_Low_and_Close_below_L_Band = Prev_Candle_Low_and_Close_below_L_Band
+        Log_high_price = high_price
+        Log_low_price = low_price
+        Log_last_price = last_price
+        Log_Prev_low = Prev_low
+        Log_Prev_high = Prev_high
+
+        ' Long entry check
+        If Upper_Lower_Band_Span > 0.0003 And (((low_price < lower_band) And (last_price > lower_band)) Or ((Prev_Candle_Low_and_Close_below_L_Band = True) And (last_price > lower_band))) Then
             ' Assign trade opened flag
             Properties_Class.position_entry_in_progress = True
             Properties_Class.long_position_opened = True
@@ -127,6 +156,14 @@ Public Class Bollinger_Band_Strategy
             End If
 
             ' Execute long entry trade
+            ' Log execution technicls
+            Dim thrd_log_to_file_long_exec As Thread
+
+            thrd_log_to_file_long_exec = New Thread(Sub() Log_to_file.Log_to_file_method_for_execution(Log_Upper_Lower_Band_Span, Log_upper_band, Log_Prev_Candle_High_and_Close_above_U_Band, Log_Prev_Candle_Low_and_Close_below_L_Band,
+                                                                                                       Log_high_price, Log_low_price, Log_last_price, Log_Prev_low, Log_Prev_high))
+            thrd_log_to_file_long_exec.Start()
+            ' Execute
+            'RaiseEvent start_trading_strategy(candle_arr, open_price, high_price, low_price, last_price)
             Dim exec_thrd As Thread
 
             exec_thrd = New Thread(AddressOf i_execute.execute_in_ord_LMT)
@@ -137,7 +174,7 @@ Public Class Bollinger_Band_Strategy
         End If
 
         ' Short entry check
-        If Upper_Lower_Band_Span > 0.0015 And (((high_price > upper_band) And (last_price < upper_band)) Or ((Prev_Candle_High_and_Close_above_U_Band = True) And (last_price < upper_band))) Then
+        If Upper_Lower_Band_Span > 0.0003 And (((high_price > upper_band) And (last_price < upper_band)) Or ((Prev_Candle_High_and_Close_above_U_Band = True) And (last_price < upper_band))) Then
             ' Assign trade opened flag
             Properties_Class.position_entry_in_progress = True
             Properties_Class.short_position_opened = True
@@ -154,6 +191,13 @@ Public Class Bollinger_Band_Strategy
             End If
 
             ' Execute short entry trade
+            ' Log execution technicls
+            Dim thrd_log_to_file_short_exec As Thread
+
+            thrd_log_to_file_short_exec = New Thread(Sub() Log_to_file.Log_to_file_method_for_execution(Log_Upper_Lower_Band_Span, Log_upper_band, Log_Prev_Candle_High_and_Close_above_U_Band, Log_Prev_Candle_Low_and_Close_below_L_Band,
+                                                                                                       Log_high_price, Log_low_price, Log_last_price, Log_Prev_low, Log_Prev_high))
+            thrd_log_to_file_short_exec.Start()
+            ' Execute
             Dim exec_thrd As Thread
 
             exec_thrd = New Thread(AddressOf i_execute.execute_in_ord_LMT)
