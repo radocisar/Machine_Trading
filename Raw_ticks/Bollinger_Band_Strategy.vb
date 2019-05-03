@@ -14,6 +14,8 @@ Public Class Bollinger_Band_Strategy
         Dim Prev_Candle_Low_and_Close_below_L_Band As Boolean
         Dim Prev_low As Double
         Dim Prev_high As Double
+        Dim standard_deviation As Double = CDbl(Form1.tbx_std_dev.Text)
+        Dim initial_candle_count As Integer = Form1.candle_init_count
 
 #Region "Variables assignment and prep work"
 
@@ -31,28 +33,28 @@ Public Class Bollinger_Band_Strategy
         BB_candle_arr(Form1.candle_init_count - 1, 3) = last_price
 
         ' Middle band
-        middle_band = calculate_mean(BB_candle_arr)
+        middle_band = calculate_mean(BB_candle_arr, initial_candle_count)
 
         ' Upper band
-        upper_band = middle_band + (calculate_std(middle_band, BB_candle_arr) * Form1.tbx_std_dev)
+        upper_band = middle_band + (calculate_std(middle_band, BB_candle_arr, initial_candle_count) * standard_deviation)
 
         ' Lower band
-        lower_band = middle_band - (calculate_std(middle_band, BB_candle_arr) * Form1.tbx_std_dev)
+        lower_band = middle_band - (calculate_std(middle_band, BB_candle_arr, initial_candle_count) * standard_deviation)
 
         ' Band span
         Upper_Lower_Band_Span = upper_band - lower_band
 
         ' Previous Candle High and Close above Upper Band
-        Prev_Candle_High_and_Close_above_U_Band = BB_candle_arr(Form1.candle_init_count - 2, 3) > upper_band
+        Prev_Candle_High_and_Close_above_U_Band = BB_candle_arr(initial_candle_count - 2, 3) > upper_band
 
         ' Previous Candle Low and Close below Lower Band
-        Prev_Candle_Low_and_Close_below_L_Band = BB_candle_arr(Form1.candle_init_count - 2, 3) > lower_band
+        Prev_Candle_Low_and_Close_below_L_Band = BB_candle_arr(initial_candle_count - 2, 3) > lower_band
 
         ' Previous low
-        Prev_low = BB_candle_arr(Form1.candle_init_count - 2, 2)
+        Prev_low = BB_candle_arr(initial_candle_count - 2, 2)
 
         ' Previous high
-        Prev_high = BB_candle_arr(Form1.candle_init_count - 2, 1)
+        Prev_high = BB_candle_arr(initial_candle_count - 2, 1)
 
         'For Testing:
         If Raising_Orders.test_completed = True Then
@@ -274,10 +276,10 @@ Public Class Bollinger_Band_Strategy
 
     End Function
 
-    Function calculate_mean(BB_candle_arr(,) As Double)
+    Function calculate_mean(BB_candle_arr(,) As Double, initial_candle_count As Integer)
         Dim sum_of_close As Double
 
-        For n = 0 To Form1.candle_init_count - 1
+        For n = 0 To initial_candle_count - 1
             sum_of_close = sum_of_close + BB_candle_arr(n, 3)
         Next
 
@@ -287,12 +289,12 @@ Public Class Bollinger_Band_Strategy
 
     End Function
 
-    Function calculate_std(middle_band As Double, BB_candle_arr(,) As Double)
+    Function calculate_std(middle_band As Double, BB_candle_arr(,) As Double, initial_candle_count As Integer)
 
         Dim value_and_mean_diff As Double
         Dim std As Double
 
-        For n = 0 To Form1.candle_init_count - 1
+        For n = 0 To initial_candle_count - 1
             value_and_mean_diff = value_and_mean_diff + ((BB_candle_arr(n, 3) - middle_band) * (BB_candle_arr(n, 3) - middle_band))
         Next
 
