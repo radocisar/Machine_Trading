@@ -4,6 +4,7 @@ Imports IBApi
 
 Public Class Form1
 
+    Dim cls_Bollinger_Band_Strategy As Bollinger_Band_Strategy = New Bollinger_Band_Strategy
     Public cnnt_cls As Connect = New Connect
     Dim current_time_cls As Current_time = New Current_time
     Dim data_cls As Data = New Data
