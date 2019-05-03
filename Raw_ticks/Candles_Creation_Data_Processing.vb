@@ -239,7 +239,7 @@ Public Class Candles_Creation_Data_Processing
                     live_updates_started = True
                     Dim date_span_to_subtract_for_logging As TimeSpan
                     date_span_to_subtract_for_logging = New TimeSpan(0, 0, Form1.candle_resolution, 0, 0)
-                    'RaiseEvent start_trading_strategy(candle_arr, open_price, high_price, low_price, last_price)
+                    RaiseEvent start_trading_strategy(candle_arr, open_price, high_price, low_price, last_price)
                     ' On new thread:
                     'Open_str_wrt.str_wrt_1.WriteLine("Start: " & candle_start_time & "|" & "End: " & candle_end_time)
                     'Open_str_wrt.str_wrt_1.WriteLine("Open: " & candle_arr(Form1.candle_init_count - 1, 0))
@@ -266,7 +266,7 @@ Public Class Candles_Creation_Data_Processing
             Case "intra-candle"
                 Dim thrd_log_to_file_intra_candle As Thread
 
-                'RaiseEvent start_trading_strategy(candle_arr, open_price, high_price, low_price, last_price)
+                RaiseEvent start_trading_strategy(candle_arr, open_price, high_price, low_price, last_price)
                 thrd_log_to_file_intra_candle = New Thread(Sub() Log_to_file.Log_to_file_method_for_candles_logging(origin, Current_time, candle_start_time, candle_end_time, Nothing, Nothing, open_price, high_price, low_price, last_price))
                 thrd_log_to_file_intra_candle.Start()
                 'Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine(Current_time)
