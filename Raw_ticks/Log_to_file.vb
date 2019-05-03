@@ -68,7 +68,7 @@ Public Class Log_to_file
         End SyncLock
     End Sub
 
-    Public Shared Sub Log_to_file_method_for_execution(Log_Upper_Lower_Band_Span As Double, Log_upper_band As Double, Log_Prev_Candle_High_and_Close_above_U_Band As Double, Log_Prev_Candle_Low_and_Close_below_L_Band As Double, Log_high_price As Double,
+    Public Shared Sub Log_to_file_method_for_execution(Log_Upper_Lower_Band_Span As Double, Log_upper_band As Double, Log_middle_band As Double, Log_lower_band As Double, Log_Prev_Candle_High_and_Close_above_U_Band As Double, Log_Prev_Candle_Low_and_Close_below_L_Band As Double, Log_high_price As Double,
                                                        Log_low_price As Double, Log_last_price As Double, Log_Prev_low As Double, Log_Prev_high As Double)
 
         SyncLock thread_lock_for_execution_logging
@@ -76,6 +76,8 @@ Public Class Log_to_file
             Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Execution Details: " & vbCrLf &
                                                                "Upper_Lower_Band_Span: " & Log_Upper_Lower_Band_Span & vbCrLf &
                                                                "Upper_band: " & Log_upper_band & vbCrLf &
+                                                               "Middle_band" & middle_band & vbCrLf &
+                                                               "Lower_band" & lower_band & vbCrLf &
                                                                "Prev_Candle_High_and_Close_above_U_Band: " & Log_Prev_Candle_High_and_Close_above_U_Band & vbCrLf &
                                                                "Prev_Candle_Low_and_Close_below_L_Band: " & Log_Prev_Candle_Low_and_Close_below_L_Band & vbCrLf &
                                                                "high_price: " & Log_high_price & vbCrLf &

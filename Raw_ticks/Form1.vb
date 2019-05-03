@@ -95,6 +95,9 @@ Public Class Form1
 
     Private Sub btn_trade_last_tick_Click(sender As Object, e As EventArgs) Handles btn_trade_last_tick.Click
 
+        Properties_Class.standard_deviation = CDbl(tbx_std_dev.Text)
+        Properties_Class.initial_candle_count = CInt(tbx_min_num_of_candles.Text)
+
         auto_trading = True
         Dim i_Open_str_wrt As Open_str_wrt = New Open_str_wrt
         If Form1.str_wrt_opened = False Then

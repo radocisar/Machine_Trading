@@ -7,5 +7,7 @@
     Public Shared position_entry_in_progress As Boolean
     Public Shared stp_loss_chck_in_progress As Boolean
     Public Shared take_prft_chck_in_progress As Boolean
+    Public Shared standard_deviation As Double
+    Public Shared initial_candle_count As Integer
 
 End Class

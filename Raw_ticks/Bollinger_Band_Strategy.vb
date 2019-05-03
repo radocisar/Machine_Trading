@@ -14,8 +14,6 @@ Public Class Bollinger_Band_Strategy
         Dim Prev_Candle_Low_and_Close_below_L_Band As Boolean
         Dim Prev_low As Double
         Dim Prev_high As Double
-        Dim standard_deviation As Double = CDbl(Form1.tbx_std_dev.Text)
-        Dim initial_candle_count As Integer = Form1.candle_init_count
 
 #Region "Variables assignment and prep work"
 
@@ -33,28 +31,28 @@ Public Class Bollinger_Band_Strategy
         BB_candle_arr(Form1.candle_init_count - 1, 3) = last_price
 
         ' Middle band
-        middle_band = calculate_mean(BB_candle_arr, initial_candle_count)
+        middle_band = calculate_mean(BB_candle_arr, Properties_Class.initial_candle_count)
 
         ' Upper band
-        upper_band = middle_band + (calculate_std(middle_band, BB_candle_arr, initial_candle_count) * standard_deviation)
+        upper_band = middle_band + (calculate_std(middle_band, BB_candle_arr, Properties_Class.initial_candle_count) * Properties_Class.standard_deviation)
 
         ' Lower band
-        lower_band = middle_band - (calculate_std(middle_band, BB_candle_arr, initial_candle_count) * standard_deviation)
+        lower_band = middle_band - (calculate_std(middle_band, BB_candle_arr, Properties_Class.initial_candle_count) * Properties_Class.standard_deviation)
 
         ' Band span
         Upper_Lower_Band_Span = upper_band - lower_band
 
         ' Previous Candle High and Close above Upper Band
-        Prev_Candle_High_and_Close_above_U_Band = BB_candle_arr(initial_candle_count - 2, 3) > upper_band
+        Prev_Candle_High_and_Close_above_U_Band = BB_candle_arr(Properties_Class.initial_candle_count - 2, 3) > upper_band
 
         ' Previous Candle Low and Close below Lower Band
-        Prev_Candle_Low_and_Close_below_L_Band = BB_candle_arr(initial_candle_count - 2, 3) > lower_band
+        Prev_Candle_Low_and_Close_below_L_Band = BB_candle_arr(Properties_Class.initial_candle_count - 2, 3) > lower_band
 
         ' Previous low
-        Prev_low = BB_candle_arr(initial_candle_count - 2, 2)
+        Prev_low = BB_candle_arr(Properties_Class.initial_candle_count - 2, 2)
 
         ' Previous high
-        Prev_high = BB_candle_arr(initial_candle_count - 2, 1)
+        Prev_high = BB_candle_arr(Properties_Class.initial_candle_count - 2, 1)
 
         'For Testing:
         If Raising_Orders.test_completed = True Then
@@ -98,9 +96,12 @@ Public Class Bollinger_Band_Strategy
             Exit Sub
         Loop
         If Properties_Class.position_opened = False Then
-            MsgBox("Position entry check initiated with:" & vbCrLf &
+            MsgBox(DateTime.Now & vbCrLf & vbCrLf &
+                   "Position entry check initiated with:" & vbCrLf &
                    "Upper_Lower_Band_Span: " & Upper_Lower_Band_Span & vbCrLf &
                    "Upper_band: " & upper_band & vbCrLf &
+                   "Middle_band" & middle_band & vbCrLf &
+                   "Lower_band" & lower_band & vbCrLf &
                    "Prev_Candle_High_and_Close_above_U_Band: " & Prev_Candle_High_and_Close_above_U_Band & vbCrLf &
                    "Prev_Candle_Low_and_Close_below_L_Band: " & Prev_Candle_Low_and_Close_below_L_Band & vbCrLf &
                    "high_price: " & high_price & vbCrLf &
@@ -108,7 +109,7 @@ Public Class Bollinger_Band_Strategy
                    "last_price: " & last_price & vbCrLf &
                    "Prev_low: " & Prev_low & vbCrLf &
                    "Prev_high: " & Prev_high)
-            position_entry_test(Upper_Lower_Band_Span, upper_band, Prev_Candle_High_and_Close_above_U_Band, Prev_Candle_Low_and_Close_below_L_Band, high_price, low_price, last_price, Prev_low, Prev_high)
+            position_entry_test(Upper_Lower_Band_Span, upper_band, middle_band, lower_band, Prev_Candle_High_and_Close_above_U_Band, Prev_Candle_Low_and_Close_below_L_Band, high_price, low_price, last_price, Prev_low, Prev_high)
         End If
 
 #End Region
@@ -116,11 +117,14 @@ Public Class Bollinger_Band_Strategy
 
     End Sub
 
-    Function position_entry_test(Upper_Lower_Band_Span As Double, upper_band As Double, Prev_Candle_High_and_Close_above_U_Band As Boolean, Prev_Candle_Low_and_Close_below_L_Band As Boolean, high_price As Double, low_price As Double, last_price As Double, Prev_low As Double, Prev_high As Double)
+    Function position_entry_test(Upper_Lower_Band_Span As Double, upper_band As Double, middle_band As Double, lower_band As Double, Prev_Candle_High_and_Close_above_U_Band As Boolean, Prev_Candle_Low_and_Close_below_L_Band As Boolean,
+                                 high_price As Double, low_price As Double, last_price As Double, Prev_low As Double, Prev_high As Double)
         Dim i_execute As Execute = New Execute
         Dim i_Auto_open_trade_parameters As Auto_open_trade_parameters = New Auto_open_trade_parameters
         Dim Log_Upper_Lower_Band_Span As Double
         Dim Log_upper_band As Double
+        Dim Log_middle_band As Double
+        Dim Log_lower_band As Double
         Dim Log_Prev_Candle_High_and_Close_above_U_Band As Double
         Dim Log_Prev_Candle_Low_and_Close_below_L_Band As Double
         Dim Log_high_price As Double
@@ -132,6 +136,8 @@ Public Class Bollinger_Band_Strategy
         ' Technicals for logging
         Log_Upper_Lower_Band_Span = Upper_Lower_Band_Span
         Log_upper_band = upper_band
+        Log_middle_band = middle_band
+        Log_lower_band = lower_band
         Log_Prev_Candle_High_and_Close_above_U_Band = Prev_Candle_High_and_Close_above_U_Band
         Log_Prev_Candle_Low_and_Close_below_L_Band = Prev_Candle_Low_and_Close_below_L_Band
         Log_high_price = high_price
@@ -161,8 +167,8 @@ Public Class Bollinger_Band_Strategy
             ' Log execution technicls
             Dim thrd_log_to_file_long_exec As Thread
 
-            thrd_log_to_file_long_exec = New Thread(Sub() Log_to_file.Log_to_file_method_for_execution(Log_Upper_Lower_Band_Span, Log_upper_band, Log_Prev_Candle_High_and_Close_above_U_Band, Log_Prev_Candle_Low_and_Close_below_L_Band,
-                                                                                                       Log_high_price, Log_low_price, Log_last_price, Log_Prev_low, Log_Prev_high))
+            thrd_log_to_file_long_exec = New Thread(Sub() Log_to_file.Log_to_file_method_for_execution(Log_Upper_Lower_Band_Span, Log_upper_band, Log_middle_band, Log_lower_band, Log_Prev_Candle_High_and_Close_above_U_Band,
+                                                                                                       Log_Prev_Candle_Low_and_Close_below_L_Band, Log_high_price, Log_low_price, Log_last_price, Log_Prev_low, Log_Prev_high))
             thrd_log_to_file_long_exec.Start()
             ' Execute
             'RaiseEvent start_trading_strategy(candle_arr, open_price, high_price, low_price, last_price)
