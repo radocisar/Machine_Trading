@@ -238,7 +238,7 @@ Public Class Candles_Creation_Data_Processing
                     ' start trading the strategy
                     live_updates_started = True
                     Dim date_span_to_subtract_for_logging As TimeSpan
-                    date_span_to_subtract_for_logging = New TimeSpan(0, 0, Form1.candle_resolution, 0, 0
+                    date_span_to_subtract_for_logging = New TimeSpan(0, 0, Form1.candle_resolution, 0, 0)
                     RaiseEvent start_trading_strategy(candle_arr, open_price, high_price, low_price, last_price)
                     ' On new thread:
                     'Open_str_wrt.str_wrt_1.WriteLine("Start: " & candle_start_time & "|" & "End: " & candle_end_time)
