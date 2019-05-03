@@ -202,7 +202,7 @@ Public Class Bollinger_Band_Strategy
             ' Log execution technicls
             Dim thrd_log_to_file_short_exec As Thread
 
-            thrd_log_to_file_short_exec = New Thread(Sub() Log_to_file.Log_to_file_method_for_execution(Log_Upper_Lower_Band_Span, Log_upper_band, Log_Prev_Candle_High_and_Close_above_U_Band, Log_Prev_Candle_Low_and_Close_below_L_Band,
+            thrd_log_to_file_short_exec = New Thread(Sub() Log_to_file.Log_to_file_method_for_execution(Log_Upper_Lower_Band_Span, Log_upper_band, Log_middle_band, Log_lower_band, Log_Prev_Candle_High_and_Close_above_U_Band, Log_Prev_Candle_Low_and_Close_below_L_Band,
                                                                                                        Log_high_price, Log_low_price, Log_last_price, Log_Prev_low, Log_Prev_high))
             thrd_log_to_file_short_exec.Start()
             ' Execute

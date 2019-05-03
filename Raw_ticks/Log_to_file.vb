@@ -76,8 +76,8 @@ Public Class Log_to_file
             Open_str_wrt.str_wrt_for_Candles_Logging.WriteLine("Execution Details: " & vbCrLf &
                                                                "Upper_Lower_Band_Span: " & Log_Upper_Lower_Band_Span & vbCrLf &
                                                                "Upper_band: " & Log_upper_band & vbCrLf &
-                                                               "Middle_band" & middle_band & vbCrLf &
-                                                               "Lower_band" & lower_band & vbCrLf &
+                                                               "Middle_band" & Log_middle_band & vbCrLf &
+                                                               "Lower_band" & Log_lower_band & vbCrLf &
                                                                "Prev_Candle_High_and_Close_above_U_Band: " & Log_Prev_Candle_High_and_Close_above_U_Band & vbCrLf &
                                                                "Prev_Candle_Low_and_Close_below_L_Band: " & Log_Prev_Candle_Low_and_Close_below_L_Band & vbCrLf &
                                                                "high_price: " & Log_high_price & vbCrLf &
