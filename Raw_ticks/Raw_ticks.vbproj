@@ -73,7 +73,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
     <Reference Include="TWSLib">
-      <HintPath>..\..\..\..\..\..\..\TWS API\source\CSharpClient\activex\bin\Release\TWSLib.dll</HintPath>
+      <HintPath>C:\TWS API\source\CSharpClient\activex\bin\Release\TWSLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
